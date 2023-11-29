@@ -7,9 +7,10 @@ import { Priority } from "../types/Task";
 type TaskCardProps = {
   title: string;
   isCompleted?: boolean;
-  isActive?: boolean; // Renamed from isRunning to isActive
+  isActive?: boolean;
   priority: Priority;
   children?: any;
+  handleCheckedTask: () => void;
 };
 
 export default function TaskCard(props: TaskCardProps) {
@@ -27,7 +28,7 @@ export default function TaskCard(props: TaskCardProps) {
           <Show when={props.isCompleted === false}>
             <input
               type="checkbox"
-              checked={props.isCompleted}
+              onClick={() => props.handleCheckedTask()}
               class="form-checkbox h-5 w-5 text-blue-600 mr-2"
             />
           </Show>

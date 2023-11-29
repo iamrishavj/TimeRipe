@@ -64,6 +64,7 @@ export default function TaskList(props: TaskListProps) {
                 isCompleted={props.ListType === "Finished"}
                 title={task.title}
                 isActive={props.ListType === "Active" && index() === 0}
+                handleCheckedTask={() => props.updateTasks(task.id, "Finished")}
               >
                 <Show when={props.ListType === "Active"}>
                   {task.description}
