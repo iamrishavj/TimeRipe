@@ -10,6 +10,23 @@ import { dummyTasks } from "./data/sampleTasks";
 function App() {
   const [tasks, setTasks] = createStore<TaskPlanner>(dummyTasks);
 
+  function CustomOrderingForActiveQueue(task: Task) {
+    setTasks(
+      "Active",
+      [...tasks["Active"], { ...task, priority: task.priority }].sort(
+        (a, b) => priorityMap[a.priority] - priorityMap[b.priority]
+      )
+    );
+  }
+
+  const handleAddTask = (task: Task, status: keyof TaskPlanner) => {
+    if (status === "Active") {
+      CustomOrderingForActiveQueue(task);
+    } else setTasks(status, [...tasks[status], task]);
+
+    // Todo: Store the added tasks
+  };
+
   const updateTasks = (taskId: string, newStatus: keyof TaskPlanner) => {
     // Find the task and its current status
     let currentStatus: keyof TaskPlanner | undefined;
@@ -31,20 +48,13 @@ function App() {
 
       // Add the task to the new status array and sort if necessary
       if (newStatus === "Active") {
-        setTasks(
-          newStatus,
-          [
-            ...tasks[newStatus],
-            { ...taskToUpdate, priority: taskToUpdate.priority },
-          ].sort((a, b) => priorityMap[a.priority] - priorityMap[b.priority])
-        );
+        CustomOrderingForActiveQueue(taskToUpdate);
       } else {
         setTasks(newStatus, [...tasks[newStatus], { ...taskToUpdate }]);
       }
     }
 
-    // Update localStorage
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    // Todo: Store the updated tasks
   };
 
   return (
@@ -59,6 +69,7 @@ function App() {
             ListType="Todo"
             tasks={tasks["Todo"]}
             updateTasks={updateTasks}
+            handleAddTask={handleAddTask}
           />
         </div>
         <div class="w-full md:w-1/2 overflow-auto">
@@ -66,6 +77,7 @@ function App() {
             ListType="Active"
             tasks={tasks["Active"]}
             updateTasks={updateTasks}
+            handleAddTask={handleAddTask}
           />
         </div>
         <div class="md:w-1/4 overflow-auto hidden md:block">

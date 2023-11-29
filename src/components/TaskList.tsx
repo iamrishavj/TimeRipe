@@ -7,6 +7,7 @@ interface TaskListProps {
   ListType: keyof TaskPlanner;
   tasks: Task[];
   updateTasks: (taskId: string, newStatus: keyof TaskPlanner) => void;
+  handleAddTask?: (task: Task, status: keyof TaskPlanner) => void;
 }
 
 export default function TaskList(props: TaskListProps) {
@@ -72,7 +73,12 @@ export default function TaskList(props: TaskListProps) {
           )}
         </For>
         <Show when={props.ListType !== "Finished"}>
-          <AddTask />
+          {props.handleAddTask !== undefined && (
+            <AddTask
+              handleAddTask={props.handleAddTask}
+              ListType={props.ListType}
+            />
+          )}
         </Show>
       </div>
     </div>

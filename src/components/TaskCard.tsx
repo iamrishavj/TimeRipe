@@ -18,20 +18,20 @@ export default function TaskCard(props: TaskCardProps) {
       draggable="true"
       class={`bg-white shadow-md rounded-lg p-4 mb-2 ${
         props.isActive ? "border-l-4 border-blue-600" : ""
-      } cursor-move`}
+      } cursor-move
+      ${props.isCompleted ? "scratch" : ""}
+      `}
     >
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <input
-            type="checkbox"
-            checked={props.isCompleted}
-            class="form-checkbox h-5 w-5 text-blue-600 mr-2"
-          />
-          <span
-            class={`${props.isCompleted ? "line-through" : ""} font-semibold`}
-          >
-            {props.title}
-          </span>
+          <Show when={props.isCompleted === false}>
+            <input
+              type="checkbox"
+              checked={props.isCompleted}
+              class="form-checkbox h-5 w-5 text-blue-600 mr-2"
+            />
+          </Show>
+          <span class="font-semibold">{props.title}</span>
         </div>
         <Show when={props.isCompleted === false}>
           <span

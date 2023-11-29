@@ -1,18 +1,49 @@
 import { createSignal } from "solid-js";
+import toast from "solid-toast";
 
-import { txtPriorityColor } from "../utils/priorityConfig";
+import { Task, TaskPlanner } from "../types/Task";
 
-export default function AddTask() {
+interface AddTaskProps {
+  handleAddTask: (task: Task, status: keyof TaskPlanner) => void;
+  ListType: keyof TaskPlanner;
+}
+
+export default function AddTask(props: AddTaskProps) {
   const [showForm, setShowForm] = createSignal(false);
+  const [title, setTitle] = createSignal("");
+  const [description, setDescription] = createSignal("");
+  const [priority, setPriority] = createSignal("low");
 
   const handleAddTaskClick = () => {
     setShowForm(true);
   };
 
-  const handleSaveTask = () => {
-    // Logic to save the task
+  const handleCancelTaskClick = () => {
     setShowForm(false);
-    // You would also need to collect and use the values from the inputs
+  };
+
+  const handleAddTask = () => {
+    // Validate the form
+    if (!title() && title() === "") {
+      toast.error("Please enter a title");
+      return;
+    }
+    // Construct the new task object with the values from the signals
+    const newTask: Task = {
+      id: Date.now().toString(), // or another approach to generate unique IDs
+      title: title(),
+      description: description(),
+      priority: priority() as Task["priority"],
+    };
+
+    // Call the passed in handleAddTask function with the new task and status
+    props.handleAddTask(newTask, props.ListType);
+
+    // Reset the form
+    setTitle("");
+    setDescription("");
+    setPriority("low");
+    setShowForm(false);
   };
 
   return (
@@ -24,6 +55,7 @@ export default function AddTask() {
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               placeholder="Title"
+              onChange={(e) => setTitle(e.currentTarget.value)}
             />
           </div>
           <div class="mb-4">
@@ -31,37 +63,35 @@ export default function AddTask() {
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               placeholder="Description"
+              onChange={(e) => setDescription(e.currentTarget.value)}
             />
           </div>
           <div class="mb-4">
             <select
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               name="Priority"
+              value={priority()}
+              onChange={(e) => setPriority(e.currentTarget.value)}
             >
-              <option class={`${txtPriorityColor["low"]}`} value="low">
-                Low
-              </option>
-              <option class={`${txtPriorityColor["medium"]}`} value="medium">
-                Medium
-              </option>
-              <option class={`${txtPriorityColor["high"]}`} value="high">
-                High
-              </option>
-              <option
-                class={`${txtPriorityColor["critical"]}`}
-                value="critical"
-              >
-                Critical
-              </option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="critical">Critical</option>
             </select>
           </div>
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between gap-1">
             <button
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              class="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
-              onClick={handleSaveTask}
+              onClick={handleAddTask}
             >
               Add Task
+            </button>
+            <button
+              class="flex-1 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={handleCancelTaskClick}
+            >
+              Cancel
             </button>
           </div>
         </div>

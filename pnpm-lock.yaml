@@ -5,12 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@thisbeyond/solid-dnd':
-    specifier: ^0.7.5
-    version: 0.7.5(solid-js@1.8.6)
   solid-js:
     specifier: ^1.8.5
     version: 1.8.6
+  solid-toast:
+    specifier: ^0.5.0
+    version: 0.5.0(solid-js@1.8.6)
 
 devDependencies:
   autoprefixer:
@@ -712,15 +712,6 @@ packages:
     dev: true
     optional: true
 
-  /@thisbeyond/solid-dnd@0.7.5(solid-js@1.8.6):
-    resolution: {integrity: sha512-DfI5ff+yYGpK9M21LhYwIPlbP2msKxN2ARwuu6GF8tT1GgNVDTI8VCQvH4TJFoVApP9d44izmAcTh/iTCH2UUw==}
-    engines: {node: '>=18.0.0', pnpm: '>=8.6.0'}
-    peerDependencies:
-      solid-js: ^1.5
-    dependencies:
-      solid-js: 1.8.6
-    dev: false
-
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
     dependencies:
@@ -1410,6 +1401,14 @@ packages:
       '@babel/types': 7.23.4
       solid-js: 1.8.6
     dev: true
+
+  /solid-toast@0.5.0(solid-js@1.8.6):
+    resolution: {integrity: sha512-t770JakjyS2P9b8Qa1zMLOD51KYKWXbTAyJePVUoYex5c5FH5S/HtUBUbZAWFcqRCKmAE8KhyIiCvDZA8bOnxQ==}
+    peerDependencies:
+      solid-js: ^1.5.4
+    dependencies:
+      solid-js: 1.8.6
+    dev: false
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
