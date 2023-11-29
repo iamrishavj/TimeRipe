@@ -1,6 +1,6 @@
 import { Show } from "solid-js";
 
-import { priorityColor } from "../utils/priorityConfig";
+import { bgPriorityColor } from "../utils/priorityConfig";
 
 import { Priority } from "../types/Task";
 
@@ -36,7 +36,7 @@ export default function TaskCard(props: TaskCardProps) {
         <Show when={props.isCompleted === false}>
           <span
             class={`text-xs font-semibold text-white px-2 py-1 rounded-full ${
-              priorityColor[props.priority]
+              bgPriorityColor[props.priority]
             }`}
           >
             {props.priority.toUpperCase()}

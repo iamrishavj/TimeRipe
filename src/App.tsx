@@ -1,9 +1,11 @@
-// import { createSignal } from 'solid-js';
-import { dummyTasks } from "./data/sampleTasks";
-import TaskList from "./components/TaskList";
 import { createStore } from "solid-js/store";
+import TaskList from "./components/TaskList";
+
 import { Task, TaskPlanner } from "./types/Task";
+
 import { priorityMap } from "./utils/priorityConfig";
+
+import { dummyTasks } from "./data/sampleTasks";
 
 function App() {
   const [tasks, setTasks] = createStore<TaskPlanner>(dummyTasks);

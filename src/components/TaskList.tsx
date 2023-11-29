@@ -1,5 +1,6 @@
 import { For, Show, createSignal } from "solid-js";
 import TaskCard from "./TaskCard";
+import AddTask from "./AddTask";
 import { Task, TaskPlanner } from "../types/Task";
 
 interface TaskListProps {
@@ -70,6 +71,9 @@ export default function TaskList(props: TaskListProps) {
             </div>
           )}
         </For>
+        <Show when={props.ListType !== "Finished"}>
+          <AddTask />
+        </Show>
       </div>
     </div>
   );

@@ -7,9 +7,16 @@ export const priorityMap: Record<Priority, number> = {
   low: 4,
 };
 
-export const priorityColor: Record<Priority, string> = {
+export const bgPriorityColor: Record<Priority, string> = {
   critical: "bg-red-500",
   high: "bg-orange-400",
   medium: "bg-yellow-300",
   low: "bg-green-300",
+};
+
+export const txtPriorityColor: Record<Priority, string> = {
+  critical: "text-red-500",
+  high: "text-orange-400",
+  medium: "text-yellow-300",
+  low: "text-green-300",
 };
