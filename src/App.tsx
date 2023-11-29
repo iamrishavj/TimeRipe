@@ -63,8 +63,8 @@ function App() {
         {/* Timer or other content here */}
         {/* Timer Component */}
       </div>
-      <div class="flex-1 flex overflow-hidden">
-        <div class="md:w-1/4 overflow-auto hidden md:block">
+      <div class="flex-1 flex overflow-hidden gap-1">
+        <div class="md:w-1/4 overflow-auto hidden md:block rounded-t-xl">
           <TaskList
             ListType="Todo"
             tasks={tasks["Todo"]}
@@ -72,7 +72,7 @@ function App() {
             handleAddTask={handleAddTask}
           />
         </div>
-        <div class="w-full md:w-1/2 overflow-auto">
+        <div class="w-full md:w-1/2 overflow-auto rounded-t-xl">
           <TaskList
             ListType="Active"
             tasks={tasks["Active"]}
@@ -80,7 +80,7 @@ function App() {
             handleAddTask={handleAddTask}
           />
         </div>
-        <div class="md:w-1/4 overflow-auto hidden md:block">
+        <div class="md:w-1/4 overflow-auto hidden md:block rounded-t-xl">
           <TaskList
             ListType="Finished"
             tasks={tasks["Finished"]}
