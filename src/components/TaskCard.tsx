@@ -1,50 +1,114 @@
-import { Show } from "solid-js";
+import { Show, createSignal } from "solid-js";
 
 import { bgPriorityColor } from "../utils/priorityConfig";
 
-import { Priority } from "../types/Task";
+import { Task, TaskPlanner } from "../types/Task";
+import AddTask from "./AddTask";
 
 type TaskCardProps = {
-  title: string;
-  isCompleted?: boolean;
+  task: Task;
+  ListType: keyof TaskPlanner;
   isActive?: boolean;
-  priority: Priority;
   children?: any;
   handleCheckedTask: () => void;
+  handleEditTask?: (task: Task, status: keyof TaskPlanner) => void;
 };
 
 export default function TaskCard(props: TaskCardProps) {
+  const [isEdit, setIsEdit] = createSignal(false);
+
+  const isCompleted = props.ListType === "Finished";
+
+  if (isEdit()) {
+    // Ensure that AddTask can handle both adding and editing of tasks
+    return (
+      <AddTask
+        task={props.task}
+        handleAddTask={(task) => {
+          if (props.handleEditTask) {
+            props.handleEditTask(task, props.ListType);
+            setIsEdit(false); // Exit edit mode after task update
+          }
+        }}
+        ListType={props.ListType}
+      />
+    );
+  }
   return (
     <div
       draggable="true"
-      class={`bg-white shadow-md rounded-lg p-4 mb-2 ${
+      class={`relative bg-white shadow-md rounded-lg p-4 mb-2 ${
         props.isActive ? "border-l-4 border-blue-600" : ""
-      } cursor-move
-      ${props.isCompleted ? "scratch" : ""}
-      `}
+      } ${isCompleted ? "scratch" : ""} cursor-move`}
     >
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <Show when={props.isCompleted === false}>
+          <Show when={!isCompleted}>
             <input
               type="checkbox"
-              onClick={() => props.handleCheckedTask()}
+              onClick={props.handleCheckedTask}
               class="form-checkbox h-5 w-5 text-blue-600 mr-2"
             />
           </Show>
-          <span class="font-semibold">{props.title}</span>
+          <span class="font-semibold">{props.task.title}</span>
         </div>
-        <Show when={props.isCompleted === false}>
-          <span
-            class={`text-xs font-semibold text-white px-2 py-1 rounded-full ${
-              bgPriorityColor[props.priority]
-            }`}
-          >
-            {props.priority.toUpperCase()}
-          </span>
-        </Show>
+        <div class="flex items-center">
+          <Show when={!isCompleted}>
+            <span
+              class={`text-xs font-semibold text-white px-2 py-1 rounded-full ${
+                bgPriorityColor[props.task.priority]
+              }`}
+            >
+              {props.task.priority.toUpperCase()}
+            </span>
+            <EditButton onClick={() => setIsEdit(true)} />
+          </Show>
+          <DeleteButton
+            onClick={() => {
+              //had to add ! to props.handleEditTask
+            }}
+          />
+        </div>
       </div>
       <div class="mt-2">{props.children}</div>
     </div>
+  );
+}
+
+function EditButton(props: { onClick: () => void }) {
+  return (
+    <button class="ml-1" onClick={props.onClick} aria-label="Edit task">
+      <svg
+        class="feather feather-edit"
+        fill="none"
+        height="20"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+      </svg>
+    </button>
+  );
+}
+
+function DeleteButton(props: { onClick: () => void }) {
+  return (
+    <button class="ml-1" onClick={props.onClick} aria-label="Delete task">
+      <svg
+        height="24"
+        viewBox="0 0 48 48"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M12 38c0 2.21 1.79 4 4 4h16c2.21 0 4-1.79 4-4V14H12v24zM38 8h-7l-2-2H19l-2 2h-7v4h28V8z" />
+        <path d="M0 0h48v48H0z" fill="none" />
+      </svg>
+    </button>
   );
 }

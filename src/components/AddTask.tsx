@@ -1,18 +1,27 @@
 import { createSignal } from "solid-js";
 import toast from "solid-toast";
 
-import { Task, TaskPlanner } from "../types/Task";
+import { Task, TaskPlanner, Priority } from "../types/Task";
+
+const DEFAULT_TASK_PRIORITY: Priority = "low";
 
 interface AddTaskProps {
+  task?: Task;
   handleAddTask: (task: Task, status: keyof TaskPlanner) => void;
   ListType: keyof TaskPlanner;
 }
 
 export default function AddTask(props: AddTaskProps) {
-  const [showForm, setShowForm] = createSignal(false);
-  const [title, setTitle] = createSignal("");
-  const [description, setDescription] = createSignal("");
-  const [priority, setPriority] = createSignal("low");
+  const [showForm, setShowForm] = createSignal(
+    props.task !== undefined || false
+  );
+  const [title, setTitle] = createSignal(props.task?.title || "");
+  const [description, setDescription] = createSignal(
+    props.task?.description || ""
+  );
+  const [priority, setPriority] = createSignal(
+    props.task?.priority || DEFAULT_TASK_PRIORITY
+  );
 
   const handleAddTaskClick = () => {
     setShowForm(true);
@@ -28,13 +37,24 @@ export default function AddTask(props: AddTaskProps) {
       toast.error("Please enter a title");
       return;
     }
+    let newTask: Task | undefined = props.task;
     // Construct the new task object with the values from the signals
-    const newTask: Task = {
-      id: Date.now().toString(), // or another approach to generate unique IDs
-      title: title(),
-      description: description(),
-      priority: priority() as Task["priority"],
-    };
+    if (newTask === undefined) {
+      newTask = {
+        id: Date.now().toString(), // or another approach to generate unique IDs
+        title: title(),
+        description: description(),
+        priority: priority() as Task["priority"],
+      };
+    } else {
+      if (props.task?.id !== undefined)
+        newTask = {
+          id: props.task?.id, // or another approach to generate unique IDs
+          title: title(),
+          description: description(),
+          priority: priority() as Task["priority"],
+        };
+    }
 
     // Call the passed in handleAddTask function with the new task and status
     props.handleAddTask(newTask, props.ListType);
@@ -42,7 +62,7 @@ export default function AddTask(props: AddTaskProps) {
     // Reset the form
     setTitle("");
     setDescription("");
-    setPriority("low");
+    setPriority(DEFAULT_TASK_PRIORITY);
     setShowForm(false);
   };
 
@@ -52,6 +72,7 @@ export default function AddTask(props: AddTaskProps) {
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div class="mb-4">
             <input
+              value={title()}
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               placeholder="Title"
@@ -60,6 +81,7 @@ export default function AddTask(props: AddTaskProps) {
           </div>
           <div class="mb-4">
             <input
+              value={description()}
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               placeholder="Description"
@@ -71,7 +93,7 @@ export default function AddTask(props: AddTaskProps) {
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               name="Priority"
               value={priority()}
-              onChange={(e) => setPriority(e.currentTarget.value)}
+              onChange={(e) => setPriority(e.currentTarget.value as Priority)}
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>

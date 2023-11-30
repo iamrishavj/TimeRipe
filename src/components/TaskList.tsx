@@ -60,11 +60,11 @@ export default function TaskList(props: TaskListProps) {
               }}
             >
               <TaskCard
-                priority={task.priority}
-                isCompleted={props.ListType === "Finished"}
-                title={task.title}
+                task={task}
+                ListType={props.ListType}
                 isActive={props.ListType === "Active" && index() === 0}
                 handleCheckedTask={() => props.updateTasks(task.id, "Finished")}
+                handleEditTask={props.handleAddTask}
               >
                 <Show when={props.ListType === "Active"}>
                   {task.description}
