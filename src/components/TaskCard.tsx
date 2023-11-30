@@ -1,9 +1,10 @@
 import { Show, createSignal } from "solid-js";
+import toast from "solid-toast";
 
 import { bgPriorityColor } from "../utils/priorityConfig";
 
 import { Task, TaskPlanner } from "../types/Task";
-import AddTask from "./AddTask";
+import EditTaskCard from "./EditTaskCard";
 
 type TaskCardProps = {
   task: Task;
@@ -12,6 +13,7 @@ type TaskCardProps = {
   children?: any;
   handleCheckedTask: () => void;
   handleEditTask?: (task: Task, status: keyof TaskPlanner) => void;
+  handleDeleteTask: (task: Task, status: keyof TaskPlanner) => void;
 };
 
 export default function TaskCard(props: TaskCardProps) {
@@ -19,59 +21,64 @@ export default function TaskCard(props: TaskCardProps) {
 
   const isCompleted = props.ListType === "Finished";
 
-  if (isEdit()) {
-    // Ensure that AddTask can handle both adding and editing of tasks
-    return (
-      <AddTask
-        task={props.task}
-        handleAddTask={(task) => {
-          if (props.handleEditTask) {
-            props.handleEditTask(task, props.ListType);
-            setIsEdit(false); // Exit edit mode after task update
-          }
-        }}
-        ListType={props.ListType}
-      />
-    );
-  }
+  console.log("isEdit", isEdit());
+
   return (
-    <div
-      draggable="true"
-      class={`relative bg-white shadow-md rounded-lg p-4 mb-2 ${
-        props.isActive ? "border-l-4 border-blue-600" : ""
-      } ${isCompleted ? "scratch" : ""} cursor-move`}
-    >
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <Show when={!isCompleted}>
-            <input
-              type="checkbox"
-              onClick={props.handleCheckedTask}
-              class="form-checkbox h-5 w-5 text-blue-600 mr-2"
-            />
-          </Show>
-          <span class="font-semibold">{props.task.title}</span>
+    <>
+      <Show when={isEdit()}>
+        <EditTaskCard
+          task={props.task}
+          handleEditTask={(task) => {
+            if (props.handleEditTask) {
+              props.handleEditTask(task, props.ListType);
+              setIsEdit(false); // Exit edit mode after task update
+            }
+          }}
+          handleFinishEditing={() => setIsEdit(false)}
+          ListType={props.ListType}
+        />
+      </Show>
+      <Show when={!isEdit()}>
+        <div
+          draggable="true"
+          class={`relative bg-white shadow-md rounded-lg p-4 mb-2 ${
+            props.isActive ? "border-l-4 border-blue-600" : ""
+          } ${isCompleted ? "scratch" : ""} cursor-move`}
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <Show when={!isCompleted}>
+                <input
+                  type="checkbox"
+                  onClick={props.handleCheckedTask}
+                  class="form-checkbox h-5 w-5 text-blue-600 mr-2"
+                />
+              </Show>
+              <span class="font-semibold">{props.task.title}</span>
+            </div>
+            <div class="flex items-center">
+              <Show when={!isCompleted}>
+                <span
+                  class={`text-xs font-semibold text-white px-2 py-1 rounded-full ${
+                    bgPriorityColor[props.task.priority]
+                  }`}
+                >
+                  {props.task.priority.toUpperCase()}
+                </span>
+                <EditButton onClick={() => setIsEdit(true)} />
+              </Show>
+              <DeleteButton
+                onClick={() => {
+                  props.handleDeleteTask(props.task, props.ListType);
+                  toast.success("Task deleted");
+                }}
+              />
+            </div>
+          </div>
+          <div class="mt-2">{props.children}</div>
         </div>
-        <div class="flex items-center">
-          <Show when={!isCompleted}>
-            <span
-              class={`text-xs font-semibold text-white px-2 py-1 rounded-full ${
-                bgPriorityColor[props.task.priority]
-              }`}
-            >
-              {props.task.priority.toUpperCase()}
-            </span>
-            <EditButton onClick={() => setIsEdit(true)} />
-          </Show>
-          <DeleteButton
-            onClick={() => {
-              //had to add ! to props.handleEditTask
-            }}
-          />
-        </div>
-      </div>
-      <div class="mt-2">{props.children}</div>
-    </div>
+      </Show>
+    </>
   );
 }
 
@@ -79,7 +86,7 @@ function EditButton(props: { onClick: () => void }) {
   return (
     <button class="ml-1" onClick={props.onClick} aria-label="Edit task">
       <svg
-        class="feather feather-edit"
+        class="feather feather-edit hover:opacity-60"
         fill="none"
         height="20"
         stroke="currentColor"
@@ -101,6 +108,7 @@ function DeleteButton(props: { onClick: () => void }) {
   return (
     <button class="ml-1" onClick={props.onClick} aria-label="Delete task">
       <svg
+        class="feather feather-trash-2 hover:opacity-60"
         height="24"
         viewBox="0 0 48 48"
         width="24"

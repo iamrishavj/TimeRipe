@@ -10,10 +10,10 @@ import { dummyTasks } from "./data/sampleTasks";
 function App() {
   const [tasks, setTasks] = createStore<TaskPlanner>(dummyTasks);
 
-  function CustomOrderingForActiveQueue(task: Task) {
+  function CustomOrderingForActiveQueue() {
     setTasks(
       "Active",
-      [...tasks["Active"], { ...task, priority: task.priority }].sort(
+      [...tasks["Active"]].sort(
         (a, b) => priorityMap[a.priority] - priorityMap[b.priority]
       )
     );
@@ -21,10 +21,29 @@ function App() {
 
   const handleAddTask = (task: Task, status: keyof TaskPlanner) => {
     if (status === "Active") {
-      CustomOrderingForActiveQueue(task);
+      setTasks("Active", [
+        ...tasks["Active"],
+        { ...task, priority: task.priority },
+      ]);
+      CustomOrderingForActiveQueue();
     } else setTasks(status, [...tasks[status], task]);
 
     // Todo: Store the added tasks
+  };
+
+  const handleEditTask = (task: Task, status: keyof TaskPlanner) => {
+    setTasks(
+      status,
+      tasks[status].map((t) => (t.id === task.id ? task : t))
+    );
+    if (status === "Active") CustomOrderingForActiveQueue();
+  };
+
+  const handleDeleteTask = (task: Task, status: keyof TaskPlanner) => {
+    setTasks(
+      status,
+      tasks[status].filter((t) => t.id !== task.id)
+    );
   };
 
   const updateTasks = (taskId: string, newStatus: keyof TaskPlanner) => {
@@ -48,7 +67,11 @@ function App() {
 
       // Add the task to the new status array and sort if necessary
       if (newStatus === "Active") {
-        CustomOrderingForActiveQueue(taskToUpdate);
+        setTasks("Active", [
+          ...tasks["Active"],
+          { ...taskToUpdate, priority: taskToUpdate.priority },
+        ]);
+        CustomOrderingForActiveQueue();
       } else {
         setTasks(newStatus, [...tasks[newStatus], { ...taskToUpdate }]);
       }
@@ -56,6 +79,8 @@ function App() {
 
     // Todo: Store the updated tasks
   };
+
+  CustomOrderingForActiveQueue();
 
   return (
     <div class="flex flex-col h-screen overflow-hidden">
@@ -70,6 +95,8 @@ function App() {
             tasks={tasks["Todo"]}
             updateTasks={updateTasks}
             handleAddTask={handleAddTask}
+            handleEditTask={handleEditTask}
+            handleDeleteTask={handleDeleteTask}
           />
         </div>
         <div class="w-full md:w-1/2 overflow-auto rounded-t-xl">
@@ -78,6 +105,8 @@ function App() {
             tasks={tasks["Active"]}
             updateTasks={updateTasks}
             handleAddTask={handleAddTask}
+            handleEditTask={handleEditTask}
+            handleDeleteTask={handleDeleteTask}
           />
         </div>
         <div class="md:w-1/4 overflow-auto hidden md:block rounded-t-xl">
@@ -85,6 +114,7 @@ function App() {
             ListType="Finished"
             tasks={tasks["Finished"]}
             updateTasks={updateTasks}
+            handleDeleteTask={handleDeleteTask}
           />
         </div>
       </div>

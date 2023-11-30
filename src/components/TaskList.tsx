@@ -1,6 +1,6 @@
 import { For, Show, createSignal } from "solid-js";
 import TaskCard from "./TaskCard";
-import AddTask from "./AddTask";
+import AddTaskCard from "./AddTaskCard";
 import { Task, TaskPlanner } from "../types/Task";
 
 interface TaskListProps {
@@ -8,6 +8,8 @@ interface TaskListProps {
   tasks: Task[];
   updateTasks: (taskId: string, newStatus: keyof TaskPlanner) => void;
   handleAddTask?: (task: Task, status: keyof TaskPlanner) => void;
+  handleEditTask?: (task: Task, status: keyof TaskPlanner) => void;
+  handleDeleteTask: (task: Task, status: keyof TaskPlanner) => void;
 }
 
 export default function TaskList(props: TaskListProps) {
@@ -64,7 +66,8 @@ export default function TaskList(props: TaskListProps) {
                 ListType={props.ListType}
                 isActive={props.ListType === "Active" && index() === 0}
                 handleCheckedTask={() => props.updateTasks(task.id, "Finished")}
-                handleEditTask={props.handleAddTask}
+                handleEditTask={props.handleEditTask}
+                handleDeleteTask={props.handleDeleteTask}
               >
                 <Show when={props.ListType === "Active"}>
                   {task.description}
@@ -75,7 +78,7 @@ export default function TaskList(props: TaskListProps) {
         </For>
         <Show when={props.ListType !== "Finished"}>
           {props.handleAddTask !== undefined && (
-            <AddTask
+            <AddTaskCard
               handleAddTask={props.handleAddTask}
               ListType={props.ListType}
             />
