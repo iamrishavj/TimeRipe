@@ -1,20 +1,20 @@
-import { createSignal } from "solid-js";
+import { Show, createSignal } from "solid-js";
 import toast from "solid-toast";
 
-import { Task, TaskPlanner, Priority } from "../types/Task";
+import { Task, Priority } from "../types/Task";
 
 const DEFAULT_TASK_PRIORITY: Priority = "low";
 
 interface AddTaskCardProps {
-  handleAddTask: (task: Task, status: keyof TaskPlanner) => void;
-  ListType: keyof TaskPlanner;
+  handleAddTask: (task: Task) => void;
 }
 
 export default function AddTaskCard(props: AddTaskCardProps) {
-  const [showForm, setShowForm] = createSignal(false);
-  const [title, setTitle] = createSignal("");
-  const [description, setDescription] = createSignal("");
-  const [priority, setPriority] = createSignal(DEFAULT_TASK_PRIORITY);
+  const [showForm, setShowForm] = createSignal<boolean>(false);
+
+  const [title, setTitle] = createSignal<string>("");
+  const [description, setDescription] = createSignal<string>("");
+  const [priority, setPriority] = createSignal<Priority>(DEFAULT_TASK_PRIORITY);
 
   const handleAddTaskClick = () => {
     setShowForm(true);
@@ -38,7 +38,7 @@ export default function AddTaskCard(props: AddTaskCardProps) {
     };
 
     // Call the passed in handleAddTask function with the new task and status
-    props.handleAddTask(newTask, props.ListType);
+    props.handleAddTask(newTask);
 
     // Reset the form
     setTitle("");
@@ -49,7 +49,7 @@ export default function AddTaskCard(props: AddTaskCardProps) {
 
   return (
     <div class="mt-4">
-      {showForm() ? (
+      <Show when={showForm()}>
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div class="mb-4">
             <input
@@ -85,7 +85,7 @@ export default function AddTaskCard(props: AddTaskCardProps) {
               type="button"
               onClick={handleAddTask}
             >
-              Add Task
+              Add
             </button>
             <button
               class="flex-1 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -95,7 +95,8 @@ export default function AddTaskCard(props: AddTaskCardProps) {
             </button>
           </div>
         </div>
-      ) : (
+      </Show>
+      <Show when={!showForm()}>
         <div class="flex items-center justify-center">
           <button
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -104,7 +105,7 @@ export default function AddTaskCard(props: AddTaskCardProps) {
             + Add Task
           </button>
         </div>
-      )}
+      </Show>
     </div>
   );
 }

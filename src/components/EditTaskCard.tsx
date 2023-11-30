@@ -1,19 +1,20 @@
 import { createSignal } from "solid-js";
 import toast from "solid-toast";
 
-import { Task, TaskPlanner, Priority } from "../types/Task";
+import { Task, Priority } from "../types/Task";
 
 interface EditTaskCardProps {
   task: Task;
   handleFinishEditing: () => void;
-  handleEditTask: (task: Task, status: keyof TaskPlanner) => void;
-  ListType: keyof TaskPlanner;
+  handleEditTask: (task: Task) => void;
 }
 
 export default function EditTaskCard(props: EditTaskCardProps) {
-  const [title, setTitle] = createSignal(props.task.title);
-  const [description, setDescription] = createSignal(props.task.description);
-  const [priority, setPriority] = createSignal(props.task.priority);
+  const [title, setTitle] = createSignal<string>(props.task.title);
+  const [description, setDescription] = createSignal<string>(
+    props.task.description
+  );
+  const [priority, setPriority] = createSignal<Priority>(props.task.priority);
 
   const handleCancelTaskClick = () => {
     props.handleFinishEditing();
@@ -32,7 +33,7 @@ export default function EditTaskCard(props: EditTaskCardProps) {
       priority: priority() as Task["priority"],
     };
     // Call the passed in handleAddTask function with the new task and status
-    props.handleEditTask(editedTask, props.ListType);
+    props.handleEditTask(editedTask);
     props.handleFinishEditing();
   };
 
@@ -75,7 +76,7 @@ export default function EditTaskCard(props: EditTaskCardProps) {
             type="button"
             onClick={handleSaveTask}
           >
-            Save Task
+            Save
           </button>
           <button
             class="flex-1 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

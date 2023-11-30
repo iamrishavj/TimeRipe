@@ -73,12 +73,12 @@ export default function TaskList(props: TaskListProps) {
           )}
         </For>
         <Show when={props.ListType !== "Finished"}>
-          {props.handleAddTask !== undefined && (
-            <AddTaskCard
-              handleAddTask={props.handleAddTask}
-              ListType={props.ListType}
-            />
-          )}
+          <AddTaskCard
+            handleAddTask={(task) => {
+              if (props.handleAddTask === undefined) return;
+              props.handleAddTask(task, props.ListType);
+            }}
+          />
         </Show>
       </div>
     </div>

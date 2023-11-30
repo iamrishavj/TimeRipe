@@ -38,7 +38,6 @@ export default function TaskCard(props: TaskCardProps) {
             }
           }}
           handleFinishEditing={() => setIsEdit(false)}
-          ListType={props.ListType}
         />
       </Show>
       <Show when={!isEdit()}>
@@ -129,7 +128,11 @@ function EditButton(props: { onClick: () => void }) {
 
 function DeleteButton(props: { onClick: () => void }) {
   return (
-    <button class="ml-1" onClick={props.onClick} aria-label="Delete task">
+    <button
+      class="ml-1 hidden md:block"
+      onClick={props.onClick}
+      aria-label="Delete task"
+    >
       <svg
         class="feather feather-trash-2 hover:opacity-60"
         height="24"
