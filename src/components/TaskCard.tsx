@@ -1,16 +1,19 @@
 import { Show, createSignal } from "solid-js";
 import toast from "solid-toast";
 
-import { bgPriorityColor } from "../utils/priorityConfig";
+import EditTaskCard from "./EditTaskCard";
 
 import { Task, TaskPlanner } from "../types/Task";
-import EditTaskCard from "./EditTaskCard";
+
+import { bgPriorityColor } from "../utils/priorityConfig";
+import { truncateDescription } from "../utils/helper";
+
+const MAX_LENGTH_DESCRIPTION = 250;
 
 type TaskCardProps = {
   task: Task;
   ListType: keyof TaskPlanner;
   isActive?: boolean;
-  children?: any;
   handleCheckedTask: () => void;
   handleEditTask?: (task: Task, status: keyof TaskPlanner) => void;
   handleDeleteTask: (task: Task, status: keyof TaskPlanner) => void;
@@ -50,7 +53,16 @@ export default function TaskCard(props: TaskCardProps) {
               <Show when={!isCompleted}>
                 <input
                   type="checkbox"
-                  onClick={props.handleCheckedTask}
+                  onClick={() => {
+                    props.handleCheckedTask();
+                    toast.success("Task completed!!", {
+                      icon: "🎉",
+                      style: {
+                        "background-color": "#10B981",
+                        "text-decoration-color": "#fff",
+                      },
+                    });
+                  }}
                   class="form-checkbox h-5 w-5 text-blue-600 mr-2"
                 />
               </Show>
@@ -75,7 +87,18 @@ export default function TaskCard(props: TaskCardProps) {
               />
             </div>
           </div>
-          <div class="mt-2">{props.children}</div>
+          <div class="mt-2">
+            <Show when={props.ListType === "Active"}>
+              <div class="mt-2 text-gray-600 text-sm">
+                {truncateDescription(
+                  props.task.description,
+                  MAX_LENGTH_DESCRIPTION
+                )}
+                {props.task.description.length > MAX_LENGTH_DESCRIPTION &&
+                  "..."}
+              </div>
+            </Show>
+          </div>
         </div>
       </Show>
     </>

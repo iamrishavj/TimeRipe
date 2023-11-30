@@ -1,8 +1,8 @@
 import { createStore } from "solid-js/store";
+
 import TaskList from "./components/TaskList";
 
 import { Task, TaskPlanner } from "./types/Task";
-
 import { priorityMap } from "./utils/priorityConfig";
 
 import { dummyTasks } from "./data/sampleTasks";
@@ -20,13 +20,9 @@ function App() {
   }
 
   const handleAddTask = (task: Task, status: keyof TaskPlanner) => {
-    if (status === "Active") {
-      setTasks("Active", [
-        ...tasks["Active"],
-        { ...task, priority: task.priority },
-      ]);
-      CustomOrderingForActiveQueue();
-    } else setTasks(status, [...tasks[status], task]);
+    setTasks(status, [...tasks[status], task]);
+
+    if (status === "Active") CustomOrderingForActiveQueue();
 
     // Todo: Store the added tasks
   };
@@ -65,21 +61,16 @@ function App() {
         tasks[currentStatus].filter((t) => t.id !== taskId)
       );
 
-      // Add the task to the new status array and sort if necessary
-      if (newStatus === "Active") {
-        setTasks("Active", [
-          ...tasks["Active"],
-          { ...taskToUpdate, priority: taskToUpdate.priority },
-        ]);
-        CustomOrderingForActiveQueue();
-      } else {
-        setTasks(newStatus, [...tasks[newStatus], { ...taskToUpdate }]);
-      }
+      // Add the task to the new status array and re-order the active queue
+
+      setTasks(newStatus, [...tasks[newStatus], { ...taskToUpdate }]);
+      if (newStatus === "Active") CustomOrderingForActiveQueue();
     }
 
     // Todo: Store the updated tasks
   };
 
+  //Order the stored tasks in the Active queue for the first time
   CustomOrderingForActiveQueue();
 
   return (

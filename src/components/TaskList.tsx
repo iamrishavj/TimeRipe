@@ -68,11 +68,7 @@ export default function TaskList(props: TaskListProps) {
                 handleCheckedTask={() => props.updateTasks(task.id, "Finished")}
                 handleEditTask={props.handleEditTask}
                 handleDeleteTask={props.handleDeleteTask}
-              >
-                <Show when={props.ListType === "Active"}>
-                  {task.description}
-                </Show>
-              </TaskCard>
+              />
             </div>
           )}
         </For>
