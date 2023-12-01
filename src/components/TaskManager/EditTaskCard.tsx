@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 import toast from "solid-toast";
 
-import { Task, Priority } from "../types/Task";
+import { Task, Priority } from "../../types/Task";
 
 interface EditTaskCardProps {
   task: Task;

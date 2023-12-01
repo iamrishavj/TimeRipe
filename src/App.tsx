@@ -1,5 +1,5 @@
-import PomodoroTimer from "./components/PomodoroTimer";
-import TaskManager from "./components/TaskManager";
+import PomodoroTimer from "./components/Timer/PomodoroTimer";
+import TaskManager from "./components/TaskManager/TaskManager";
 
 function App() {
   return (

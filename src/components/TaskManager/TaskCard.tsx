@@ -3,10 +3,10 @@ import toast from "solid-toast";
 
 import EditTaskCard from "./EditTaskCard";
 
-import { Task, TaskPlanner } from "../types/Task";
+import { Task, TaskPlanner } from "../../types/Task";
 
-import { bgPriorityColor } from "../utils/priorityConfig";
-import { truncateDescription } from "../utils/helper";
+import { bgPriorityColor } from "../../utils/priorityConfig";
+import { truncateDescription } from "../../utils/helper";
 
 const MAX_LENGTH_DESCRIPTION = 250;
 

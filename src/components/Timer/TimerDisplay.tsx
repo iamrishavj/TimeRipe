@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import { formatTime } from "../utils/helper";
+import { formatTime } from "../../utils/helper";
 
 type Props = {
   timeLeft: number;

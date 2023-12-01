@@ -1,7 +1,7 @@
 import { For, Show, createSignal } from "solid-js";
 import TaskCard from "./TaskCard";
 import AddTaskCard from "./AddTaskCard";
-import { Task, TaskPlanner } from "../types/Task";
+import { Task, TaskPlanner } from "../../types/Task";
 
 interface TaskListProps {
   ListType: keyof TaskPlanner;
