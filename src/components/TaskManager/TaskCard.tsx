@@ -60,7 +60,7 @@ export default function TaskCard(props: TaskCardProps) {
                       },
                     });
                   }}
-                  class="form-checkbox h-5 w-5 text-blue-600 mr-2"
+                  class="form-checkbox h-5 w-5 text-blue-600 mr-2 outline-none focus:scale-105 transition-all duration-200 focus:shadow-md hover:scale-110"
                 />
               </Show>
               <span class="font-semibold">{props.task.title}</span>
@@ -104,7 +104,11 @@ export default function TaskCard(props: TaskCardProps) {
 
 function EditButton(props: { onClick: () => void }) {
   return (
-    <button class="ml-1" onClick={props.onClick} aria-label="Edit task">
+    <button
+      class="ml-1 outline-none focus:scale-105 transition-all duration-200 hover:scale-105"
+      onClick={props.onClick}
+      aria-label="Edit task"
+    >
       <svg
         class="feather feather-edit hover:opacity-60"
         fill="none"
@@ -127,7 +131,7 @@ function EditButton(props: { onClick: () => void }) {
 function DeleteButton(props: { onClick: () => void }) {
   return (
     <button
-      class="ml-1 hidden md:block"
+      class="ml-1 hidden md:block outline-none focus:scale-105 hover:scale-105 transition-all duration-200"
       onClick={props.onClick}
       aria-label="Delete task"
     >
