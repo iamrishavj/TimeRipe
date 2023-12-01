@@ -13,6 +13,8 @@
   scrollbar-width: none; /* Firefox */
 }
 
+/* Scratch effect */
+
 .scratch {
   background-image: repeating-linear-gradient(
     135deg,

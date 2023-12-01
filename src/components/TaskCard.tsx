@@ -24,8 +24,6 @@ export default function TaskCard(props: TaskCardProps) {
 
   const isCompleted = props.ListType === "Finished";
 
-  console.log("isEdit", isEdit());
-
   return (
     <>
       <Show when={isEdit()}>
@@ -43,7 +41,7 @@ export default function TaskCard(props: TaskCardProps) {
       <Show when={!isEdit()}>
         <div
           draggable="true"
-          class={`relative bg-white shadow-md rounded-lg p-4 mb-2 ${
+          class={`hover:opacity-75 relative bg-white shadow-md rounded-lg p-4 mb-2 ${
             props.isActive ? "border-l-4 border-blue-600" : ""
           } ${isCompleted ? "scratch" : ""} cursor-move`}
         >
