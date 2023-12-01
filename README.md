@@ -1,28 +1,51 @@
+# TimeRipe
+
+TimeRipe is a productivity tool that incorporates the Pomodoro Technique with a task management system. It allows users to manage their tasks in Todo, Active, and Finished lists, and includes an integrated Pomodoro timer to help users focus on their work and manage breaks effectively.
+
+## Features
+
+- Task Management: Organize tasks in Todo, Active, and Finished lists.
+- Add & Edit Tasks
+- Drag-and-Drop: Reorder tasks within lists or move them between lists.
+- Pomodoro Timer: Focus on work sessions with automatic breaks.
+- Responsive Design: Works on both desktop and mobile browsers.
+- Local Storage: Tasks and timer states persist between sessions.
+
+## Installation
+
+To install TimeRipe, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/iamrishavj/TimeRipe.git`
+2. Navigate to the project directory:
+3. After installation, the application will be available at http://localhost:5173 (or a port specified by your setup).
+
 ## Usage
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+After starting the app, you can:
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+- Add tasks to the Todo list using the 'Add Task' button.
+- Move tasks to the Active list to work on them.
+- Complete tasks, moving them to the Finished list.
+- Use the Pomodoro timer at the top to work in focused intervals.
 
-## Available Scripts
+## Built With
 
-In the project directory, you can run:
+- SolidJS - The reactive framework used
+- Tailwind CSS - For utility-first styling
+- Vite - Frontend build tool
 
-### `npm run dev`
+## Versioning
 
-Runs the app in the development mode.<br>
-Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
+I use Git for versioning. For the versions available, see the tags on this repository.
 
-### `npm run build`
+## Authors
 
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
+Rishabh Jha - Initial work - iamrishavj
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## License
 
-## Deployment
+This project is licensed under the MIT License - see the LICENSE.md file for details.
 
-Learn more about deploying your application with the [documentations](https://vitejs.dev/guide/static-deploy.html)
+## Acknowledgments
+
+Hat tip to anyone whose code was used
