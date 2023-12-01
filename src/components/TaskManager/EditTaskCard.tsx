@@ -3,11 +3,11 @@ import toast from "solid-toast";
 
 import { Task, Priority } from "../../types/Task";
 
-interface EditTaskCardProps {
+type EditTaskCardProps = {
   task: Task;
   handleFinishEditing: () => void;
   handleEditTask: (task: Task) => void;
-}
+};
 
 export default function EditTaskCard(props: EditTaskCardProps) {
   const [title, setTitle] = createSignal<string>(props.task.title);

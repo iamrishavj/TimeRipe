@@ -5,9 +5,9 @@ import { Task, Priority } from "../../types/Task";
 
 const DEFAULT_TASK_PRIORITY: Priority = "low";
 
-interface AddTaskCardProps {
+type AddTaskCardProps = {
   handleAddTask: (task: Task) => void;
-}
+};
 
 export default function AddTaskCard(props: AddTaskCardProps) {
   const [showForm, setShowForm] = createSignal<boolean>(false);

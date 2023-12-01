@@ -1,14 +1,14 @@
 export type Priority = "critical" | "high" | "medium" | "low";
 
-export interface Task {
+export type Task = {
   id: string;
   title: string;
   description: string;
   priority: Priority;
-}
+};
 
-export interface TaskPlanner {
+export type TaskPlanner = {
   Todo: Task[];
   Active: Task[];
   Finished: Task[];
-}
+};

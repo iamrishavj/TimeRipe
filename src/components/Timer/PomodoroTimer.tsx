@@ -1,11 +1,11 @@
-import { Component, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import TimerDisplay from "./TimerDisplay";
 import TimerControlPanel from "./TimerControlPanel";
 
 const DEFAULT_WORK_TIME = 25; // 25 minutes in seconds
 const DEFAULT_BREAK_TIME = 5; // 5 minutes in seconds
 
-const TimerWrapper: Component = () => {
+export default function TimerWrapper() {
   const [timeLeft, setTimeLeft] = createSignal(DEFAULT_WORK_TIME * 60); // 25 minutes in seconds
   const [isRunning, setIsRunning] = createSignal(false);
   const [isWorkTime, setIsWorkTime] = createSignal(true); // true for work time, false for break
@@ -23,11 +23,16 @@ const TimerWrapper: Component = () => {
     const countdownInterval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev === 0) {
+          //Clear Interval and stop the timer
           clearInterval(countdownInterval);
           setIsRunning(false);
+
+          //Switch the flow betwen Work & Break
+          setIsWorkTime(!isWorkTime());
+
           return isWorkTime()
-            ? DEFAULT_BREAK_TIME * 60
-            : DEFAULT_WORK_TIME * 60;
+            ? DEFAULT_WORK_TIME * 60
+            : DEFAULT_BREAK_TIME * 60;
         }
         return prev - 1;
       });
@@ -66,6 +71,4 @@ const TimerWrapper: Component = () => {
       />
     </div>
   );
-};
-
-export default TimerWrapper;
+}

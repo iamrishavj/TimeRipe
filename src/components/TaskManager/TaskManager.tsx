@@ -5,7 +5,7 @@ import TaskList from "./TaskList";
 import { Task, TaskPlanner } from "../../types/Task";
 import { priorityMap } from "../../utils/priorityConfig";
 
-import { dummyTasks } from "../../sample-data/sampleTasks";
+import { dummyTasks } from "../../../sample-data/sampleTasks";
 
 export default function TaskManager() {
   const [tasks, setTasks] = createStore<TaskPlanner>(dummyTasks);

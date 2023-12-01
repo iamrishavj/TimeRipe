@@ -23,6 +23,6 @@
 
     "types": ["vite/client"]
   },
-  "include": ["src"],
+  "include": ["src", "sample-data"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

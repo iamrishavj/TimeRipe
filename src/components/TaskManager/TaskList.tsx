@@ -3,14 +3,14 @@ import TaskCard from "./TaskCard";
 import AddTaskCard from "./AddTaskCard";
 import { Task, TaskPlanner } from "../../types/Task";
 
-interface TaskListProps {
+type TaskListProps = {
   ListType: keyof TaskPlanner;
   tasks: Task[];
   updateTasks: (taskId: string, newStatus: keyof TaskPlanner) => void;
   handleAddTask?: (task: Task, status: keyof TaskPlanner) => void;
   handleEditTask?: (task: Task, status: keyof TaskPlanner) => void;
   handleDeleteTask: (task: Task, status: keyof TaskPlanner) => void;
-}
+};
 
 export default function TaskList(props: TaskListProps) {
   const [dragging, setDragging] = createSignal<string | null>(null);

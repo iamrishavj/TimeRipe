@@ -1,4 +1,4 @@
-import { TaskPlanner } from "../types/Task";
+import { TaskPlanner } from "../src/types/Task";
 
 export const dummyTasks: TaskPlanner = {
   Todo: [
