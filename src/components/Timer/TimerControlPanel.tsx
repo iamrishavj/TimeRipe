@@ -1,10 +1,10 @@
 import { Show } from "solid-js";
 
 import ControlButtonWrapper from "./ControlButtonWrapper";
-import PauseIcon from "./Icons/PauseIcon";
-import PlayIcon from "./Icons/PlayIcon";
-import ResetIcon from "./Icons/ResetIcon";
-import ForwardIcon from "./Icons/ForwardIcon";
+import PauseIcon from "./ControlButtonIcons/PauseIcon";
+import PlayIcon from "./ControlButtonIcons/PlayIcon";
+import ResetIcon from "./ControlButtonIcons/ResetIcon";
+import ForwardIcon from "./ControlButtonIcons/ForwardIcon";
 
 const CONTROL_SIZE: number = 30;
 

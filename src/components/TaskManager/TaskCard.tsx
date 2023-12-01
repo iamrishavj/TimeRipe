@@ -1,11 +1,11 @@
 import { Show, createSignal } from "solid-js";
 import toast from "solid-toast";
 
-import EditTaskCard from "./EditTaskCard";
+import EditTaskCard from "./EditTaskForm";
 
 import { Task, TaskPlanner } from "../../types/Task";
 
-import { bgPriorityColor } from "../../utils/priorityConfig";
+import { bgPriorityColor } from "../../config/taskPriorityConfig";
 import { truncateDescription } from "../../utils/helper";
 
 const MAX_LENGTH_DESCRIPTION = 250;

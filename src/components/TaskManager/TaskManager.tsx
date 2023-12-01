@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store";
 import TaskList from "./TaskList";
 
 import { Task, TaskPlanner } from "../../types/Task";
-import { priorityMap } from "../../utils/priorityConfig";
+import { priorityMap } from "../../config/taskPriorityConfig";
 
 import { dummyTasks } from "../../../sample-data/sampleTasks";
 

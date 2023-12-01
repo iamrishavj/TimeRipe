@@ -1,4 +1,4 @@
-import { DEFAULT_CONTROL_SIZE } from "../../../utils/controlButtonConfig";
+import { DEFAULT_CONTROL_SIZE } from "../../../config/timerControlButtonConfig";
 import { IconProps } from "../../../types/Timer";
 
 export default function PauseIcon({ size = DEFAULT_CONTROL_SIZE }: IconProps) {
