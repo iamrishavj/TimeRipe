@@ -1,4 +1,5 @@
 import { Show, createSignal } from "solid-js";
+
 import toast from "solid-toast";
 
 import EditTaskCard from "./EditTaskForm";
@@ -86,13 +87,11 @@ export default function TaskCard(props: TaskCardProps) {
           </div>
           <div class="mt-2">
             <Show when={props.ListType === "Active"}>
-              <div class="mt-2 text-gray-600 text-sm">
+              <div class="mt-2 text-gray-600 text-sm overflow-hidden overflow-ellipsis whitespace-nowrap">
                 {truncateDescription(
                   props.task.description,
                   MAX_LENGTH_DESCRIPTION
                 )}
-                {props.task.description.length > MAX_LENGTH_DESCRIPTION &&
-                  "..."}
               </div>
             </Show>
           </div>

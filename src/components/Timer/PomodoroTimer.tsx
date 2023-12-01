@@ -1,12 +1,14 @@
 import { createSignal } from "solid-js";
+
 import TimerDisplay from "./TimerDisplay";
 import TimerControlPanel from "./TimerControlPanel";
+
+import toast from "solid-toast";
 
 import {
   DEFAULT_WORK_TIME,
   DEFAULT_BREAK_TIME,
 } from "../../config/timerConfig";
-import toast from "solid-toast";
 
 export default function TimerWrapper() {
   const [timeLeft, setTimeLeft] = createSignal(DEFAULT_WORK_TIME * 60); // 25 minutes in seconds

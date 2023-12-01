@@ -1,4 +1,5 @@
 import { Show, createSignal } from "solid-js";
+
 import toast from "solid-toast";
 
 import { Task, Priority } from "../../types/Task";
