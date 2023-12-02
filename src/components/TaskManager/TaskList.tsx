@@ -2,6 +2,7 @@ import { For, Show, createSignal } from "solid-js";
 
 import TaskCard from "./TaskCard";
 import AddTaskCard from "./AddTaskForm";
+import ClearButton from "./TaskButtons/ClearButton";
 
 import { Task, TaskPlanner } from "../../types/Task";
 
@@ -12,6 +13,7 @@ type TaskListProps = {
   handleAddTask?: (task: Task, status: keyof TaskPlanner) => void;
   handleEditTask?: (task: Task, status: keyof TaskPlanner) => void;
   handleDeleteTask: (task: Task, status: keyof TaskPlanner) => void;
+  handleClearTasks: () => void;
 };
 
 export default function TaskList(props: TaskListProps) {
@@ -49,9 +51,17 @@ export default function TaskList(props: TaskListProps) {
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      <h2 class="sticky top-0 z-10 text-lg font-bold w-full p-2 shadow-md">
-        {props.ListType}
-      </h2>
+      <div class="flex justify-between items-center w-full p-2 shadow-md pl-4 pr-4">
+        <h2 class="text-lg font-bold">{props.ListType}</h2>
+        <ClearButton
+          onClick={() => {
+            if (confirm("Are you sure you want to clear tasks?")) {
+              props.handleClearTasks();
+            }
+          }}
+        />
+      </div>
+
       <div class="flex-1 p-3 overflow-y-scroll no-scrollbar">
         <For each={props.tasks}>
           {(task, index) => (

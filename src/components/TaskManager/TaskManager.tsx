@@ -70,6 +70,10 @@ export default function TaskManager() {
     // Todo: Store the updated tasks
   };
 
+  function handleClearTasks(ListType: keyof TaskPlanner) {
+    setTasks(ListType, []);
+  }
+
   //Order the stored tasks in the Active queue for the first time
   CustomOrderingForActiveQueue();
   return (
@@ -82,6 +86,7 @@ export default function TaskManager() {
           handleAddTask={handleAddTask}
           handleEditTask={handleEditTask}
           handleDeleteTask={handleDeleteTask}
+          handleClearTasks={() => handleClearTasks("Todo")}
         />
       </div>
       <div class="w-full md:w-1/2 overflow-auto rounded-t-xl">
@@ -92,6 +97,7 @@ export default function TaskManager() {
           handleAddTask={handleAddTask}
           handleEditTask={handleEditTask}
           handleDeleteTask={handleDeleteTask}
+          handleClearTasks={() => handleClearTasks("Active")}
         />
       </div>
       <div class="md:w-1/4 overflow-auto hidden md:block rounded-tl-xl">
@@ -100,6 +106,7 @@ export default function TaskManager() {
           tasks={tasks["Finished"]}
           updateTasks={updateTasks}
           handleDeleteTask={handleDeleteTask}
+          handleClearTasks={() => handleClearTasks("Finished")}
         />
       </div>
     </>

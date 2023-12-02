@@ -1,9 +1,9 @@
 import { createSignal } from "solid-js";
 
+import toast from "solid-toast";
+
 import TimerDisplay from "./TimerDisplay";
 import TimerControlPanel from "./TimerControlPanel";
-
-import toast from "solid-toast";
 
 import {
   DEFAULT_WORK_TIME,
