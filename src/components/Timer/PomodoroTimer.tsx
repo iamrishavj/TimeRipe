@@ -28,8 +28,8 @@ export default function TimerWrapper() {
     if (currentInterval()) clearInterval(currentInterval());
 
     const countdownInterval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev === 0) {
+      setTimeLeft((timer) => {
+        if (timer === 0) {
           //Clear Interval and stop the timer
           clearInterval(countdownInterval);
           setIsRunning(false);
@@ -43,10 +43,9 @@ export default function TimerWrapper() {
             ? DEFAULT_WORK_TIME * 60
             : DEFAULT_BREAK_TIME * 60;
         }
-        return prev - 1;
+        return timer - 1;
       });
     }, 1000);
-
     setCurrentInterval(countdownInterval);
   };
 
@@ -67,11 +66,14 @@ export default function TimerWrapper() {
     setIsWorkTime(!isWorkTime());
     resetTimer();
   };
-
   return (
     <div class="flex flex-col items-center justify-center p-4 h-full">
       <div class="flex flex-col items-center justify-center p-2 w-full max-w-lg mx-auto bg-gradient-to-r from-blue-400 via-blue-300 to-purple-500 rounded-2xl shadow-2xl transition duration-500 ease-in-out transform hover:scale-105 hover:shadow-md">
-        <TimerDisplay timeLeft={timeLeft()} isWorkTime={isWorkTime()} />
+        <TimerDisplay
+          timeLeft={timeLeft()}
+          isWorkTime={isWorkTime()}
+          isRunning={isRunning()}
+        />
         <TimerControlPanel
           isRunning={isRunning()}
           onStart={startTimer}
