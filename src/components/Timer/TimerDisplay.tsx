@@ -1,4 +1,4 @@
-import { createSignal, createEffect, createMemo } from "solid-js";
+import { createEffect, createMemo } from "solid-js";
 import { formatTime } from "../../utils/helper";
 
 import { PAGE_TITLE } from "../../config/appConfig";
@@ -13,18 +13,16 @@ const workTimeShadow = "2px 2px 4px rgba(59, 130, 246, 0.7)"; // Blue shadow
 const breakTimeShadow = "2px 2px 4px rgba(139, 92, 246, 0.7)"; // Purple shadow
 
 export default function TimerDisplay(props: TimerDisplayProps) {
-  const [title, setTitle] = createSignal<string>(PAGE_TITLE);
   const formattedTime = createMemo(() => formatTime(props.timeLeft));
 
   createEffect(() => {
-    const initialTitle = PAGE_TITLE;
     if (!props.isRunning) {
-      setTitle(initialTitle);
+      document.title = PAGE_TITLE;
     } else {
-      const titleSuffix = props.isWorkTime ? "Work: " : "Break: ";
-      setTitle(initialTitle + " - " + titleSuffix + formattedTime());
+      document.title = `${
+        props.isWorkTime ? "Work" : "Break"
+      }: ${formattedTime()}`;
     }
-    document.title = title(); // Set the document title reactively
   });
 
   return (
