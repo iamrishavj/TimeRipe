@@ -1,5 +1,8 @@
 import { createSignal } from "solid-js";
 
+import SignupForm from "./SignupForm";
+import LoginForm from "./LoginForm";
+
 function UserModal(props: { onClose: () => void }) {
   const [isLogin, setIsLogin] = createSignal(true);
 
@@ -38,56 +41,6 @@ function UserModal(props: { onClose: () => void }) {
         <div class="border-b-2 border-blue-600 mb-4"></div>
         {isLogin() ? <LoginForm /> : <SignupForm />}
       </div>
-    </div>
-  );
-}
-
-function LoginForm() {
-  return (
-    <div>
-      <input
-        type="text"
-        placeholder="Username"
-        required
-        class="border p-2 rounded mb-3 w-full"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        required
-        class="border p-2 rounded mb-3 w-full"
-      />
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
-        Login
-      </button>
-    </div>
-  );
-}
-
-function SignupForm() {
-  return (
-    <div>
-      <input
-        type="text"
-        placeholder="Username"
-        required
-        class="border p-2 rounded mb-3 w-full"
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        required
-        class="border p-2 rounded mb-3 w-full"
-      />
-      <input
-        type="password"
-        required
-        placeholder="Password"
-        class="border p-2 rounded mb-3 w-full"
-      />
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
-        Signup
-      </button>
     </div>
   );
 }
