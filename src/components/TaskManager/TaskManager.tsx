@@ -42,7 +42,7 @@ export default function TaskManager() {
     );
   };
 
-  const updateTasks = (taskId: string, newStatus: keyof TaskPlanner) => {
+  const updateTasks = (taskId: number, newStatus: keyof TaskPlanner) => {
     // Find the task and its current status
     let currentStatus: keyof TaskPlanner | undefined;
     let taskToUpdate: Task | undefined;

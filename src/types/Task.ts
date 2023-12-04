@@ -1,6 +1,7 @@
 export type Priority = "critical" | "high" | "medium" | "low";
 
 export type Task = {
+  internal_id?: number;
   id: number;
   title: string;
   description: string;

@@ -9,7 +9,7 @@ import { Task, TaskPlanner } from "../../types/Task";
 type TaskListProps = {
   ListType: keyof TaskPlanner;
   tasks: Task[];
-  updateTasks: (taskId: string, newStatus: keyof TaskPlanner) => void;
+  updateTasks: (taskId: number, newStatus: keyof TaskPlanner) => void;
   handleAddTask?: (task: Task, status: keyof TaskPlanner) => void;
   handleEditTask?: (task: Task, status: keyof TaskPlanner) => void;
   handleDeleteTask: (task: Task, status: keyof TaskPlanner) => void;
@@ -25,7 +25,7 @@ export default function TaskList(props: TaskListProps) {
       : "bg-gray-100 border-gray-300";
 
   const handleDragStart = (e: DragEvent, task: Task) => {
-    setDragging(task.id);
+    setDragging(task.id.toString());
     e.dataTransfer?.setData("application/solidjs-task", JSON.stringify(task));
     e.dataTransfer!.effectAllowed = "move";
   };
@@ -70,7 +70,8 @@ export default function TaskList(props: TaskListProps) {
               onDragStart={(e) => handleDragStart(e as DragEvent, task)}
               classList={{
                 "bg-blue-100":
-                  props.ListType === "Active" && dragging() === task.id,
+                  props.ListType === "Active" &&
+                  dragging() === task.id.toString(),
               }}
             >
               <TaskCard

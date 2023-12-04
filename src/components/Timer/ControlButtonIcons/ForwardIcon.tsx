@@ -1,5 +1,5 @@
 import { DEFAULT_CONTROL_SIZE } from "../../../config/timerControlButtonConfig";
-import { IconProps } from "../../../types/Timer";
+import { IconProps } from "../../../types/Icon";
 
 export default function ForwardIcon({
   size = DEFAULT_CONTROL_SIZE,
