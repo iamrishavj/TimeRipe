@@ -3,6 +3,7 @@ import { Show, createSignal } from "solid-js";
 import PomodoroTimer from "./components/Timer/PomodoroTimer";
 import TaskManager from "./components/TaskManager/TaskManager";
 import AddUserButton from "./components/User/AddUserButton";
+import LogOutUserButton from "./components/User/LogOutUserButton";
 import SessionListButton from "./components/User/SessionListButton";
 import UserModal from "./components/User/UserModal";
 import SessionListMenu from "./components/User/SessionListMenu";

@@ -1,4 +1,4 @@
-import { createStore } from "solid-js/store";
+import { setTasks } from "../../store/tasks";
 
 import TaskList from "./TaskList";
 
@@ -8,19 +8,24 @@ import { priorityMap } from "../../config/taskPriorityConfig";
 import { dummyTasks } from "../../../sample-data/sampleTasks";
 
 export default function TaskManager() {
-  const [tasks, setTasks] = createStore<TaskPlanner>(dummyTasks);
+  setTasks(dummyTasks);
 
   function CustomOrderingForActiveQueue() {
-    setTasks(
-      "Active",
-      [...tasks["Active"]].sort(
-        (a, b) => priorityMap[a.priority] - priorityMap[b.priority]
-      )
-    );
+    setTasks((prevTasks) => {
+      return {
+        ...prevTasks,
+        Active: [...prevTasks.Active].sort(
+          (a, b) => priorityMap[a.priority] - priorityMap[b.priority]
+        ),
+      };
+    });
   }
 
   const handleAddTask = (task: Task, status: keyof TaskPlanner) => {
-    setTasks(status, [...tasks[status], task]);
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [status]: [...prevTasks[status], task],
+    }));
 
     if (status === "Active") CustomOrderingForActiveQueue();
 
@@ -28,50 +33,51 @@ export default function TaskManager() {
   };
 
   const handleEditTask = (task: Task, status: keyof TaskPlanner) => {
-    setTasks(
-      status,
-      tasks[status].map((t) => (t.id === task.id ? task : t))
-    );
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [status]: prevTasks[status].map((t) => (t.id === task.id ? task : t)),
+    }));
+
     if (status === "Active") CustomOrderingForActiveQueue();
   };
 
   const handleDeleteTask = (task: Task, status: keyof TaskPlanner) => {
-    setTasks(
-      status,
-      tasks[status].filter((t) => t.id !== task.id)
-    );
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [status]: prevTasks[status].filter((t) => t.id !== task.id),
+    }));
   };
 
-  const updateTasks = (taskId: number, newStatus: keyof TaskPlanner) => {
-    // Find the task and its current status
-    let currentStatus: keyof TaskPlanner | undefined;
-    let taskToUpdate: Task | undefined;
-    for (const status of Object.keys(tasks) as (keyof TaskPlanner)[]) {
-      taskToUpdate = tasks[status].find((t) => t.id === taskId);
-      if (taskToUpdate) {
-        currentStatus = status;
-        break;
-      }
-    }
-
-    if (currentStatus && taskToUpdate && currentStatus !== newStatus) {
-      // Remove the task from its current status array
-      setTasks(
-        currentStatus,
-        tasks[currentStatus].filter((t) => t.id !== taskId)
+  const updateTasks = (
+    taskId: number,
+    currentStatus: keyof TaskPlanner,
+    newStatus: keyof TaskPlanner
+  ) => {
+    if (currentStatus === newStatus) return;
+    setTasks((prevTasks) => {
+      const taskToUpdate = prevTasks[currentStatus].find(
+        (t) => t.id === taskId
       );
+      if (taskToUpdate) {
+        return {
+          ...prevTasks,
+          [currentStatus]: prevTasks[currentStatus].filter(
+            (t) => t.id !== taskId
+          ),
+          [newStatus]: [...prevTasks[newStatus], { ...taskToUpdate }],
+        };
+      }
+      return prevTasks;
+    });
 
-      // Add the task to the new status array and re-order the active queue
-
-      setTasks(newStatus, [...tasks[newStatus], { ...taskToUpdate }]);
-      if (newStatus === "Active") CustomOrderingForActiveQueue();
-    }
-
-    // Todo: Store the updated tasks
+    if (newStatus === "Active") CustomOrderingForActiveQueue();
   };
 
   function handleClearTasks(ListType: keyof TaskPlanner) {
-    setTasks(ListType, []);
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [ListType]: [],
+    }));
   }
 
   //Order the stored tasks in the Active queue for the first time
@@ -81,7 +87,6 @@ export default function TaskManager() {
       <div class="md:w-1/4 overflow-auto hidden md:block rounded-tr-xl">
         <TaskList
           ListType="Todo"
-          tasks={tasks["Todo"]}
           updateTasks={updateTasks}
           handleAddTask={handleAddTask}
           handleEditTask={handleEditTask}
@@ -92,7 +97,6 @@ export default function TaskManager() {
       <div class="w-full md:w-1/2 overflow-auto rounded-t-xl">
         <TaskList
           ListType="Active"
-          tasks={tasks["Active"]}
           updateTasks={updateTasks}
           handleAddTask={handleAddTask}
           handleEditTask={handleEditTask}
@@ -103,7 +107,6 @@ export default function TaskManager() {
       <div class="md:w-1/4 overflow-auto hidden md:block rounded-tl-xl">
         <TaskList
           ListType="Finished"
-          tasks={tasks["Finished"]}
           updateTasks={updateTasks}
           handleDeleteTask={handleDeleteTask}
           handleClearTasks={() => handleClearTasks("Finished")}

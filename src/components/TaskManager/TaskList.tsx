@@ -1,4 +1,5 @@
 import { For, Show, createSignal } from "solid-js";
+import { tasks } from "../../store/tasks";
 
 import TaskCard from "./TaskCard";
 import AddTaskCard from "./AddTaskForm";
@@ -8,8 +9,11 @@ import { Task, TaskPlanner } from "../../types/Task";
 
 type TaskListProps = {
   ListType: keyof TaskPlanner;
-  tasks: Task[];
-  updateTasks: (taskId: number, newStatus: keyof TaskPlanner) => void;
+  updateTasks: (
+    taskId: number,
+    currentStatus: keyof TaskPlanner,
+    newStatus: keyof TaskPlanner
+  ) => void;
   handleAddTask?: (task: Task, status: keyof TaskPlanner) => void;
   handleEditTask?: (task: Task, status: keyof TaskPlanner) => void;
   handleDeleteTask: (task: Task, status: keyof TaskPlanner) => void;
@@ -28,6 +32,7 @@ export default function TaskList(props: TaskListProps) {
     setDragging(task.id.toString());
     e.dataTransfer?.setData("application/solidjs-task", JSON.stringify(task));
     e.dataTransfer!.effectAllowed = "move";
+    e.dataTransfer!.setData("sourceListType", props.ListType);
   };
 
   const handleDragOver = (e: DragEvent) => {
@@ -38,9 +43,14 @@ export default function TaskList(props: TaskListProps) {
   const handleDrop = (e: DragEvent) => {
     e.preventDefault();
     const data = e.dataTransfer?.getData("application/solidjs-task");
-    if (data) {
+    const sourceListType = e.dataTransfer?.getData("sourceListType");
+    if (data && sourceListType) {
       const droppedTask: Task = JSON.parse(data);
-      props.updateTasks(droppedTask.id, props.ListType);
+      props.updateTasks(
+        droppedTask.id,
+        sourceListType as keyof TaskPlanner,
+        props.ListType
+      );
     }
     setDragging(null);
   };
@@ -63,7 +73,7 @@ export default function TaskList(props: TaskListProps) {
       </div>
 
       <div class="flex-1 p-3 overflow-y-scroll no-scrollbar">
-        <For each={props.tasks}>
+        <For each={tasks[props.ListType]}>
           {(task, index) => (
             <div
               draggable
@@ -78,7 +88,9 @@ export default function TaskList(props: TaskListProps) {
                 task={task}
                 ListType={props.ListType}
                 isActive={props.ListType === "Active" && index() === 0}
-                handleCheckedTask={() => props.updateTasks(task.id, "Finished")}
+                handleCheckedTask={() =>
+                  props.updateTasks(task.id, props.ListType, "Finished")
+                }
                 handleEditTask={props.handleEditTask}
                 handleDeleteTask={props.handleDeleteTask}
               />
