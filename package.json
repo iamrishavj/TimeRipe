@@ -9,10 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.6.2",
+    "js-cookie": "^3.0.5",
     "solid-js": "^1.8.5",
     "solid-toast": "^0.5.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",

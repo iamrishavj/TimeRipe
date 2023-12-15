@@ -1,4 +1,5 @@
 import { Show, createSignal } from "solid-js";
+import toast from "solid-toast";
 
 import PomodoroTimer from "./components/Timer/PomodoroTimer";
 import TaskManager from "./components/TaskManager/TaskManager";
@@ -7,6 +8,9 @@ import LogOutUserButton from "./components/User/LogOutUserButton";
 import SessionListButton from "./components/User/SessionListButton";
 import UserModal from "./components/User/UserModal";
 import SessionListMenu from "./components/User/SessionListMenu";
+import { getSessions } from "./data-access/Sessions";
+import { user } from "./store/user";
+import { logOut } from "./services/userService";
 
 function App() {
   const [isModalOpen, setIsModalOpen] = createSignal(false);
@@ -26,7 +30,14 @@ function App() {
         <div class="relative" style={{ height: "33.333%" }}>
           {/* Position the session list button on the top left with z-index */}
           <div class="absolute top-5 left-0 transform -translate-y-1/2 z-10">
-            <SessionListButton onClick={() => setIsSideMenuOpen(true)} />
+            <Show when={user.isLoggedIn}>
+              <SessionListButton
+                onClick={() => {
+                  setIsSideMenuOpen(true);
+                  getSessions();
+                }}
+              />
+            </Show>
           </div>
 
           {/* Pomodoro timer in the center with z-index */}
@@ -35,7 +46,17 @@ function App() {
 
           {/* Position the add user button on the top right with z-index */}
           <div class="absolute top-5 right-0 transform -translate-y-1/2 z-10">
-            <AddUserButton onClick={toggleModal} />
+            <Show when={!user.isLoggedIn}>
+              <AddUserButton onClick={toggleModal} />
+            </Show>
+            <Show when={user.isLoggedIn}>
+              <LogOutUserButton
+                onClick={() => {
+                  logOut();
+                  toast.success("Logged out successfully!");
+                }}
+              />
+            </Show>
           </div>
         </div>
 
@@ -44,7 +65,7 @@ function App() {
           <TaskManager />
         </div>
       </div>
-      <Show when={isSideMenuOpen()}>
+      <Show when={isSideMenuOpen() && user.isLoggedIn}>
         <SessionListMenu
           isOpen={isSideMenuOpen()}
           toggleMenu={() => setIsSideMenuOpen(false)}

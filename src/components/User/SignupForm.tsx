@@ -9,7 +9,7 @@ export default function SignupForm() {
   const [password, setPassword] = createSignal("");
   const [confirmPassword, setConfirmPassword] = createSignal("");
 
-  const handleSignUp = async (event: any) => {
+  const handleSignUp = async (event: Event) => {
     event.preventDefault();
     if (
       username() === "" ||
