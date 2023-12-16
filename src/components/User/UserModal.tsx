@@ -39,7 +39,11 @@ function UserModal(props: { onClose: () => void }) {
           </h2>
         </div>
         <div class="border-b-2 border-blue-600 mb-4"></div>
-        {isLogin() ? <LoginForm onClose={props.onClose} /> : <SignupForm />}
+        {isLogin() ? (
+          <LoginForm onClose={props.onClose} />
+        ) : (
+          <SignupForm onClose={props.onClose} />
+        )}
       </div>
     </div>
   );

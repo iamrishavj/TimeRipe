@@ -9,11 +9,14 @@ import Cookies from "js-cookie";
 export default function LoginForm(props: { onClose: () => void }) {
   const [username, setUsername] = createSignal("");
   const [password, setPassword] = createSignal("");
+  const [isLoading, setIsLoading] = createSignal(false);
 
   const handleLogin = async (event: Event) => {
     event.preventDefault();
+    setIsLoading(true);
     if (username() === "" || password() === "") {
       toast.error("All fields are required!");
+      setIsLoading(false);
       return;
     }
 
@@ -23,18 +26,19 @@ export default function LoginForm(props: { onClose: () => void }) {
 
     if (!isSuccessful) {
       toast.error(message);
-      return;
+    } else {
+      setUser({
+        isLoggedIn: true,
+        username: username(),
+        token,
+      });
+
+      Cookies.set("accessToken", token);
+
+      toast.success(message);
     }
 
-    setUser({
-      isLoggedIn: true,
-      username: username(),
-      token,
-    });
-
-    Cookies.set("accessToken", token);
-
-    toast.success(message);
+    setIsLoading(false);
 
     props.onClose();
   };
@@ -46,6 +50,7 @@ export default function LoginForm(props: { onClose: () => void }) {
         placeholder="Username"
         value={username()}
         onChange={(e) => setUsername(e.currentTarget.value)}
+        disabled={isLoading()}
         required
         class="border p-2 rounded mb-3 w-full"
       />
@@ -54,11 +59,12 @@ export default function LoginForm(props: { onClose: () => void }) {
         placeholder="Password"
         value={password()}
         onChange={(e) => setPassword(e.currentTarget.value)}
+        disabled={isLoading()}
         required
         class="border p-2 rounded mb-3 w-full"
       />
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
-        Login
+        {isLoading() ? `Logging...` : "Login"}
       </button>
     </form>
   );

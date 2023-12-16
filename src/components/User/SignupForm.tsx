@@ -3,14 +3,17 @@ import toast from "solid-toast";
 
 import { signUp } from "../../services/userService";
 
-export default function SignupForm() {
+export default function SignupForm(props: { onClose: () => void }) {
   const [username, setUsername] = createSignal("");
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
   const [confirmPassword, setConfirmPassword] = createSignal("");
 
+  const [isLoading, setIsLoading] = createSignal(false);
+
   const handleSignUp = async (event: Event) => {
     event.preventDefault();
+    setIsLoading(true);
     if (
       username() === "" ||
       email() === "" ||
@@ -18,6 +21,7 @@ export default function SignupForm() {
       confirmPassword() === ""
     ) {
       toast.error("All fields are required!");
+      setIsLoading(false);
       return;
     }
 
@@ -25,6 +29,7 @@ export default function SignupForm() {
       toast.error("Passwords do not match!");
       setPassword("");
       setConfirmPassword("");
+      setIsLoading(false);
       return;
     }
 
@@ -34,6 +39,15 @@ export default function SignupForm() {
 
     if (result?.isSuccessful) toast.success(result.message);
     else toast.error(result?.message);
+
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+
+    setIsLoading(false);
+
+    if (result?.isSuccessful) props.onClose();
   };
 
   return (
@@ -43,6 +57,7 @@ export default function SignupForm() {
         placeholder="Username"
         value={username()}
         onChange={(e) => setUsername(e.target.value)}
+        disabled={isLoading()}
         required
         class="border p-2 rounded mb-3 w-full"
       />
@@ -51,6 +66,7 @@ export default function SignupForm() {
         placeholder="Email"
         value={email()}
         onChange={(e) => setEmail(e.target.value)}
+        disabled={isLoading()}
         required
         class="border p-2 rounded mb-3 w-full"
       />
@@ -59,6 +75,7 @@ export default function SignupForm() {
         placeholder="Password"
         value={password()}
         onChange={(e) => setPassword(e.target.value)}
+        disabled={isLoading()}
         required
         class="border p-2 rounded mb-3 w-full"
       />
@@ -67,11 +84,12 @@ export default function SignupForm() {
         placeholder="Confirm Password"
         value={confirmPassword()}
         onChange={(e) => setConfirmPassword(e.target.value)}
+        disabled={isLoading()}
         required
         class="border p-2 rounded mb-3 w-full"
       />
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
-        Signup
+        {isLoading() ? `Signing up...` : "Sign up"}
       </button>
     </form>
   );
