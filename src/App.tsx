@@ -8,7 +8,6 @@ import LogOutUserButton from "./components/User/LogOutUserButton";
 import SessionListButton from "./components/User/SessionListButton";
 import UserModal from "./components/User/UserModal";
 import SessionListMenu from "./components/User/SessionListMenu";
-import { getSessions } from "./data-access/Sessions";
 import { user } from "./store/user";
 import { logOut } from "./services/userService";
 
@@ -34,7 +33,6 @@ function App() {
               <SessionListButton
                 onClick={() => {
                   setIsSideMenuOpen(true);
-                  getSessions();
                 }}
               />
             </Show>

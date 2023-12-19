@@ -29,11 +29,10 @@ export default function LoginForm(props: { onClose: () => void }) {
     } else {
       setUser({
         isLoggedIn: true,
-        username: username(),
         token,
       });
 
-      Cookies.set("accessToken", token);
+      Cookies.set("accessToken", token, { expires: 4 / 24 }); // 4 hours
 
       toast.success(message);
     }

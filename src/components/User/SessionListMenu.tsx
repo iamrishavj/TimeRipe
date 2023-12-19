@@ -1,3 +1,9 @@
+import {
+  createNewSession,
+  getAllSessions,
+} from "../../data-access/SessionAccess";
+import { setSessionList } from "../../store/sessionsList";
+import { user } from "../../store/user";
 import SessionsList from "./SessionsList";
 
 export default function SessionListMenu(props: {
@@ -32,7 +38,7 @@ export default function SessionListMenu(props: {
         <div class="w-full flex flex-row justify-between items-center px-6 pt-2 font-semibold h-fit">
           <span>Create Session</span>
           <span>
-            <AddSessionButton />
+            <AddSessionButton onClick={handleCreateSession} />
           </span>
         </div>
         {/* Side Menu content here */}
@@ -76,4 +82,14 @@ function AddSessionButton({
       </svg>
     </button>
   );
+}
+
+async function handleCreateSession() {
+  if (!user.token) throw new Error("User is not logged in");
+
+  await createNewSession(user.token);
+
+  getAllSessions(user.token).then((sessions) => {
+    setSessionList(sessions);
+  });
 }

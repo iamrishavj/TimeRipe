@@ -58,10 +58,9 @@ const logIn = async (username: string, password: string) => {
 const logOut = () => {
   setUser({
     isLoggedIn: false,
-    username: undefined,
     token: null,
   });
-  Cookies.remove("token");
+  Cookies.remove("accessToken");
 };
 
 export { signUp, logIn, logOut };
