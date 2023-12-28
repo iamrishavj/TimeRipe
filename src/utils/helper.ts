@@ -47,3 +47,15 @@ export function transformTasks(tasks: any[]): TaskPlanner {
 
   return transformedTasks;
 }
+
+export function transformTask(task: any): Task {
+  const transformedTask: Task = {
+    internal_id: task.task_id,
+    id: task.order_index,
+    title: task.title,
+    description: task.description || "",
+    priority: task.priority,
+  };
+
+  return transformedTask;
+}

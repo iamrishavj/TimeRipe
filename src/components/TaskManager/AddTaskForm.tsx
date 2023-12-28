@@ -32,7 +32,7 @@ export default function AddTaskCard(props: AddTaskCardProps) {
       return;
     }
     const newTask: Task = {
-      id: Date.now(), // or another approach to generate unique IDs
+      id: Math.floor(Date.now() / 1000), // Divide by 1000 to convert milliseconds to seconds
       title: title(),
       description: description(),
       priority: priority() as Task["priority"],

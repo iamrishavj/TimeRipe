@@ -1,6 +1,6 @@
 import { getSessionTasks } from "../../data-access/SessionAccess";
 import { sessionList } from "../../store/sessionsList";
-import { setTasks } from "../../store/tasks";
+import { setCurrentSession, setTasks } from "../../store/tasks";
 import { user } from "../../store/user";
 import { transformTasks } from "../../utils/helper";
 
@@ -28,7 +28,10 @@ async function handleSessionClick(session_id: number) {
 
   console.log("Session clicked: ", session_id);
 
-  const tasks = await getSessionTasks(user.token, session_id);
+  const allSessiontasks = await getSessionTasks(user.token, session_id);
 
-  setTasks(transformTasks(tasks));
+  setTasks(transformTasks(allSessiontasks));
+  setCurrentSession(session_id);
+
+  //console.log("Session tasks: ", tasks.Active);
 }

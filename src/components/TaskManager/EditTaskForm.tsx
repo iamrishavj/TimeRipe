@@ -28,7 +28,7 @@ export default function EditTaskCard(props: EditTaskCardProps) {
       return;
     }
     const editedTask: Task = {
-      id: props.task.id,
+      ...props.task,
       title: title(),
       description: description(),
       priority: priority() as Task["priority"],

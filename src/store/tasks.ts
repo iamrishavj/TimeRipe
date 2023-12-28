@@ -11,4 +11,12 @@ const [tasks, setTasks] = createStore<
   }
 >(JSON.parse(localStorage.getItem("tasks") || "[]"));
 
-export { tasks, setTasks };
+function setCurrentSession(sessionId: number) {
+  setTasks("sessionId", sessionId);
+}
+
+function currentSessionId() {
+  return tasks.sessionId;
+}
+
+export { tasks, setTasks, setCurrentSession, currentSessionId };
