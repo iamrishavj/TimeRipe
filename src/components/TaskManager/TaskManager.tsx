@@ -14,6 +14,7 @@ import { dummyTasks } from "../../../sample-data/sampleTasks";
 import { user } from "../../store/user";
 import {
   addTaskInSession,
+  deleteAllStatusTasksInSession,
   deleteTaskInSession,
   editTaskInSession,
 } from "../../data-access/TaskAccess";
@@ -310,9 +311,42 @@ const updateTasks = async (
   if (newStatus === "Active") CustomOrderingForActiveQueue();
 };
 
-function handleClearTasks(ListType: keyof TaskPlanner) {
-  setTasks((prevTasks) => ({
-    ...prevTasks,
-    [ListType]: [],
-  }));
-}
+const handleClearTasks = async (ListType: keyof TaskPlanner) => {
+  if (user.isLoggedIn) {
+    if (user.token === null) {
+      toast.error("Token Expired!");
+      logOut();
+      return;
+    }
+    const sessionId = currentSessionId();
+
+    if (sessionId === undefined) {
+      toast.error("Session not selected!");
+      return;
+    }
+
+    const beforeClearTasks = tasks[ListType];
+
+    // Optimistic update: Delete the task from the local state first
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [ListType]: [],
+    }));
+
+    // Send the task to the server
+    try {
+      await deleteAllStatusTasksInSession(user.token, sessionId, ListType);
+    } catch (error) {
+      // Revert the local state if there's an error
+      setTasks((prevTasks) => ({
+        ...prevTasks,
+        [ListType]: beforeClearTasks,
+      }));
+      toast.error("Failed to clear tasks. Please try again.");
+    }
+  } else
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [ListType]: [],
+    }));
+};

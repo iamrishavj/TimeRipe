@@ -87,3 +87,27 @@ export const deleteTaskInSession = async (
     throw error;
   }
 };
+
+export const deleteAllStatusTasksInSession = async (
+  token: string,
+  sessionId: number,
+  status: keyof TaskPlanner
+) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:3000/api/session/${sessionId}/tasks`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          status: status,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

@@ -4,7 +4,7 @@ import { setCurrentSession, setTasks } from "../../store/tasks";
 import { user } from "../../store/user";
 import { transformTasks } from "../../utils/helper";
 
-export default function SessionList() {
+export default function SessionList(props: { onClose: () => void }) {
   return (
     <ul class="w-full">
       {sessionList.map((session) => {
@@ -12,7 +12,10 @@ export default function SessionList() {
           <li class="flex items-center justify-between p-4 border-b">
             <button
               class="text-lg font-semibold"
-              onClick={() => handleSessionClick(session.session_id)}
+              onClick={() => {
+                handleSessionClick(session.session_id);
+                props.onClose();
+              }}
             >
               {session.title}
             </button>

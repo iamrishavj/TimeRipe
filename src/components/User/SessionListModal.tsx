@@ -44,7 +44,7 @@ export default function SessionListModal(props: {
             </span>
           </div>
           {/* Side Menu content here */}
-          <SessionsList />
+          <SessionsList onClose={toggleMenu} />
         </div>
       </div>
     </Portal>
