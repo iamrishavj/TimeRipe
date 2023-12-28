@@ -6,8 +6,8 @@ import TaskManager from "./components/TaskManager/TaskManager";
 import AddUserButton from "./components/User/AddUserButton";
 import LogOutUserButton from "./components/User/LogOutUserButton";
 import SessionListButton from "./components/User/SessionListButton";
-import UserModal from "./components/User/UserModal";
-import SessionListMenu from "./components/User/SessionListMenu";
+import AuthModal from "./components/User/AuthModal";
+import SessionListModal from "./components/User/SessionListModal";
 import { user } from "./store/user";
 import { logOut } from "./services/userService";
 
@@ -64,13 +64,13 @@ function App() {
         </div>
       </div>
       <Show when={isSideMenuOpen() && user.isLoggedIn}>
-        <SessionListMenu
+        <SessionListModal
           isOpen={isSideMenuOpen()}
           toggleMenu={() => setIsSideMenuOpen(false)}
         />
       </Show>
       <Show when={isModalOpen()}>
-        <UserModal onClose={toggleModal} />
+        <AuthModal onClose={toggleModal} />
       </Show>
     </>
   );

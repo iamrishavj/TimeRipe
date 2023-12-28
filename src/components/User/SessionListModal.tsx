@@ -1,3 +1,4 @@
+import { Portal } from "solid-js/web";
 import {
   createNewSession,
   getAllSessions,
@@ -6,7 +7,7 @@ import { setSessionList } from "../../store/sessionsList";
 import { user } from "../../store/user";
 import SessionsList from "./SessionsList";
 
-export default function SessionListMenu(props: {
+export default function SessionListModal(props: {
   isOpen: boolean;
   toggleMenu: () => void;
 }) {
@@ -27,24 +28,26 @@ export default function SessionListMenu(props: {
   };
 
   return (
-    <div class={containerClasses()}>
-      {/* Backdrop with click handler */}
-      <div class="absolute inset-0 bg-black opacity-50" onClick={closeMenu} />
+    <Portal>
+      <div class={containerClasses()}>
+        {/* Backdrop with click handler */}
+        <div class="absolute inset-0 bg-black opacity-50" onClick={closeMenu} />
 
-      {/* Side menu */}
-      <div
-        class={`fixed left-0 top-0 w-1/2 md:w-1/4 h-full bg-gray-100 no-scrollbar overflow-hidden shadow-md z-30 transform transition-all duration-500 ${menuClasses()}`}
-      >
-        <div class="w-full flex flex-row justify-between items-center px-6 pt-2 font-semibold h-fit">
-          <span>Create Session</span>
-          <span>
-            <AddSessionButton onClick={handleCreateSession} />
-          </span>
+        {/* Side menu */}
+        <div
+          class={`fixed left-0 top-0 w-1/2 md:w-1/4 h-full bg-gray-100 no-scrollbar overflow-hidden shadow-md z-30 transform transition-all duration-500 ${menuClasses()}`}
+        >
+          <div class="w-full flex flex-row justify-between items-center px-6 pt-2 font-semibold h-fit">
+            <span>Create Session</span>
+            <span>
+              <AddSessionButton onClick={handleCreateSession} />
+            </span>
+          </div>
+          {/* Side Menu content here */}
+          <SessionsList />
         </div>
-        {/* Side Menu content here */}
-        <SessionsList />
       </div>
-    </div>
+    </Portal>
   );
 }
 
