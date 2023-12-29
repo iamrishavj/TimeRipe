@@ -10,7 +10,7 @@ import SessionListButton from "./components/User/SessionListButton";
 import AuthModal from "./components/User/AuthModal";
 import SessionListModal from "./components/User/SessionListModal";
 import { user } from "./store/user";
-import { logOut } from "./services/userService";
+import { logOut, onLogOut } from "./services/userService";
 
 function App() {
   const [isModalOpen, setIsModalOpen] = createSignal(false);
@@ -52,6 +52,7 @@ function App() {
               <LogOutUserButton
                 onClick={() => {
                   logOut();
+                  onLogOut();
                   toast.success("Logged out successfully!");
                 }}
               />

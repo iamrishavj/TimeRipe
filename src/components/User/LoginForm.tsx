@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 import toast from "solid-toast";
 
-import { logIn } from "../../services/userService";
+import { logIn, onLogIn } from "../../services/userService";
 import { setUser } from "../../store/user";
 
 import Cookies from "js-cookie";
@@ -36,6 +36,9 @@ export default function LoginForm(props: { onClose: () => void }) {
 
       toast.success(message);
     }
+
+    //Activities needed after login
+    onLogIn(token);
 
     setIsLoading(false);
 

@@ -1,6 +1,14 @@
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { setUser } from "../store/user";
+import {
+  createNewSession,
+  getAllSessions,
+  getSessionTasks,
+} from "../data-access/SessionAccess";
+import { setSessionList } from "../store/sessionsList";
+import { setCurrentSession, setTasks } from "../store/tasks";
+import { transformTasks } from "../utils/helper";
 
 const signUp = async (username: string, email: string, password: string) => {
   try {
@@ -63,4 +71,40 @@ const logOut = () => {
   Cookies.remove("accessToken");
 };
 
-export { signUp, logIn, logOut };
+const onLogIn = (token: string) => {
+  // Fetch all sessions and set the latest one as the current session
+  getAllSessions(token).then((sessions) => {
+    setSessionList(sessions);
+    const latestSession = sessions[0];
+    if (latestSession) {
+      console.log("Latest session: ", latestSession);
+      setCurrentSession(latestSession.session_id);
+
+      // Fetch and set the tasks for the latest session
+      getSessionTasks(token, latestSession.session_id).then((tasks) => {
+        console.log("Latest session tasks: ", tasks);
+        setTasks(transformTasks(tasks));
+      });
+    } else {
+      createNewSession(token).then((session) => {
+        setSessionList([session]);
+        setCurrentSession(session.session_id);
+        setTasks((previousState) => {
+          return {
+            ...previousState,
+            Active: [],
+            Finished: [],
+            Todo: [],
+          };
+        });
+      });
+    }
+  });
+};
+
+const onLogOut = () => {
+  setSessionList([]);
+  setTasks(JSON.parse(localStorage.getItem("tasks") || "[]"));
+};
+
+export { signUp, logIn, logOut, onLogIn, onLogOut };

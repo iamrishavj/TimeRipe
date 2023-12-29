@@ -1,3 +1,4 @@
+import { onMount } from "solid-js";
 import {
   currentSessionId,
   setCurrentSession,
@@ -10,7 +11,6 @@ import TaskList from "./TaskList";
 import { Task, TaskPlanner } from "../../types/Task";
 import { priorityMap } from "../../config/taskPriorityConfig";
 
-import { dummyTasks } from "../../../sample-data/sampleTasks";
 import { user } from "../../store/user";
 import {
   addTaskInSession,
@@ -20,11 +20,32 @@ import {
 } from "../../data-access/TaskAccess";
 import toast from "solid-toast";
 import { logOut } from "../../services/userService";
-import { createNewSession } from "../../data-access/SessionAccess";
-import { transformTask } from "../../utils/helper";
+import {
+  createNewSession,
+  getSessionTasks,
+} from "../../data-access/SessionAccess";
+import { transformTask, transformTasks } from "../../utils/helper";
 
 export default function TaskManager() {
-  setTasks(dummyTasks);
+  onMount(() => {
+    const currentSession = currentSessionId();
+    if (user.isLoggedIn && user.token !== null && currentSession) {
+      // If the user is logged in, fetch the tasks from the server
+      // and update the local state
+      getSessionTasks(user.token, currentSession).then((tasks) => {
+        console.log("On Mount Latest session tasks: ", tasks);
+        setTasks(transformTasks(tasks));
+      });
+    } else {
+      // If the user is not logged in, fetch the tasks from the local storage
+      // and update the local state
+      const storedTasks = localStorage.getItem("tasks");
+      console.log("On Mount Local storage tasks: ", storedTasks);
+      if (storedTasks !== null) {
+        setTasks(JSON.parse(storedTasks));
+      }
+    }
+  });
 
   //Order the stored tasks in the Active queue for the first time
   CustomOrderingForActiveQueue();
@@ -61,6 +82,10 @@ export default function TaskManager() {
     </>
   );
 }
+
+// Handlers for adding, editing, deleting and updating tasks
+// in the local state and the server
+
 function CustomOrderingForActiveQueue() {
   setTasks((prevTasks) => {
     return {
@@ -128,6 +153,7 @@ const handleAddTask = async (task: Task, status: keyof TaskPlanner) => {
       ...prevTasks,
       [status]: [...prevTasks[status], task],
     }));
+    updateLocalStorage(tasks);
   }
 
   if (status === "Active") CustomOrderingForActiveQueue();
@@ -179,11 +205,14 @@ const handleEditTask = async (task: Task, status: keyof TaskPlanner) => {
       }));
       toast.error("Failed to edit task. Please try again.");
     }
-  } else
+  } else {
     setTasks((prevTasks) => ({
       ...prevTasks,
       [status]: prevTasks[status].map((t) => (t.id === task.id ? task : t)),
     }));
+
+    updateLocalStorage(tasks);
+  }
 
   if (status === "Active") CustomOrderingForActiveQueue();
 };
@@ -222,11 +251,14 @@ const handleDeleteTask = async (task: Task, status: keyof TaskPlanner) => {
       }));
       toast.error("Failed to delete task. Please try again.");
     }
-  } else
+  } else {
     setTasks((prevTasks) => ({
       ...prevTasks,
       [status]: prevTasks[status].filter((t) => t.id !== task.id),
     }));
+
+    updateLocalStorage(tasks);
+  }
 };
 
 const updateTasks = async (
@@ -291,7 +323,7 @@ const updateTasks = async (
       });
       toast.error("Failed to update task. Please try again.");
     }
-  } else
+  } else {
     setTasks((prevTasks) => {
       const taskToUpdate = prevTasks[currentStatus].find(
         (t) => t.id === taskId
@@ -307,6 +339,9 @@ const updateTasks = async (
       }
       return prevTasks;
     });
+
+    updateLocalStorage(tasks);
+  }
 
   if (newStatus === "Active") CustomOrderingForActiveQueue();
 };
@@ -344,9 +379,16 @@ const handleClearTasks = async (ListType: keyof TaskPlanner) => {
       }));
       toast.error("Failed to clear tasks. Please try again.");
     }
-  } else
+  } else {
     setTasks((prevTasks) => ({
       ...prevTasks,
       [ListType]: [],
     }));
+
+    updateLocalStorage(tasks);
+  }
+};
+
+const updateLocalStorage = (tasks: TaskPlanner) => {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 };
