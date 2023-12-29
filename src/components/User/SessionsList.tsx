@@ -36,6 +36,4 @@ async function handleSessionClick(session_id: number) {
 
   setTasks(transformTasks(allSessiontasks));
   setCurrentSession(session_id);
-
-  //console.log("Session tasks: ", tasks.Active);
 }

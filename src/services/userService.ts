@@ -30,7 +30,7 @@ const signUp = async (username: string, email: string, password: string) => {
   } catch (error: AxiosError<any> | any) {
     console.log(error);
     return {
-      message: error.message || "Signup failed!",
+      message: error.response.data.message || "Signup failed!",
       isSuccessful: false,
     };
   }

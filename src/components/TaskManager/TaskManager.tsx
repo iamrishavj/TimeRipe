@@ -1,4 +1,10 @@
 import { onMount } from "solid-js";
+
+import toast from "solid-toast";
+
+import TaskList from "./TaskList";
+
+import { user } from "../../store/user";
 import {
   currentSessionId,
   setCurrentSession,
@@ -6,24 +12,21 @@ import {
   setTasks,
 } from "../../store/tasks";
 
-import TaskList from "./TaskList";
-
-import { Task, TaskPlanner } from "../../types/Task";
 import { priorityMap } from "../../config/taskPriorityConfig";
 
-import { user } from "../../store/user";
 import {
   addTaskInSession,
   deleteAllStatusTasksInSession,
   deleteTaskInSession,
   editTaskInSession,
 } from "../../data-access/TaskAccess";
-import toast from "solid-toast";
 import { logOut } from "../../services/userService";
 import {
   createNewSession,
   getSessionTasks,
 } from "../../data-access/SessionAccess";
+
+import { Task, TaskPlanner } from "../../types/Task";
 import { transformTask, transformTasks } from "../../utils/helper";
 
 export default function TaskManager() {
@@ -33,14 +36,12 @@ export default function TaskManager() {
       // If the user is logged in, fetch the tasks from the server
       // and update the local state
       getSessionTasks(user.token, currentSession).then((tasks) => {
-        console.log("On Mount Latest session tasks: ", tasks);
         setTasks(transformTasks(tasks));
       });
     } else {
       // If the user is not logged in, fetch the tasks from the local storage
       // and update the local state
       const storedTasks = localStorage.getItem("tasks");
-      console.log("On Mount Local storage tasks: ", storedTasks);
       if (storedTasks !== null) {
         setTasks(JSON.parse(storedTasks));
       }
