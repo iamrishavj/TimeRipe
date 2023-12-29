@@ -35,9 +35,9 @@ export default function SessionListModal(props: {
 
         {/* Side menu */}
         <div
-          class={`fixed left-0 top-0 w-1/2 md:w-1/4 h-full bg-gray-100 no-scrollbar overflow-hidden shadow-md z-30 transform transition-all duration-500 ${menuClasses()}`}
+          class={`fixed left-0 top-0 w-1/2 md:w-1/5 h-full bg-gray-100  overflow-y-scroll no-scrollbar shadow-md z-30 transform transition-all duration-500 ${menuClasses()}`}
         >
-          <div class="w-full flex flex-row justify-between items-center px-6 pt-2 font-semibold h-fit">
+          <div class="w-full flex flex-row justify-between items-center px-6 pt-2 font-bold text-lg h-fit">
             <span>Create Session</span>
             <span>
               <AddSessionButton onClick={handleCreateSession} />

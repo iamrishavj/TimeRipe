@@ -1,3 +1,4 @@
+import { For } from "solid-js";
 import { getSessionTasks } from "../../data-access/SessionAccess";
 import { sessionList } from "../../store/sessionsList";
 import { setCurrentSession, setTasks } from "../../store/tasks";
@@ -7,11 +8,11 @@ import { transformTasks } from "../../utils/helper";
 export default function SessionList(props: { onClose: () => void }) {
   return (
     <ul class="w-full">
-      {sessionList.map((session) => {
-        return (
-          <li class="flex items-center justify-between p-4 border-b">
+      <For each={sessionList}>
+        {(session) => (
+          <li class="flex items-center justify-between px-6 py-4 border-b hover:scale-x-105 transition-all ease-in-out duration-100 hover:font-extrabold">
             <button
-              class="text-lg font-semibold"
+              class="text-base font-medium"
               onClick={() => {
                 handleSessionClick(session.session_id);
                 props.onClose();
@@ -20,8 +21,8 @@ export default function SessionList(props: { onClose: () => void }) {
               {session.title}
             </button>
           </li>
-        );
-      })}
+        )}
+      </For>
     </ul>
   );
 }
