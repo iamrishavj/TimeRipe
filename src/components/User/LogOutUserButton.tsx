@@ -3,7 +3,7 @@ import { IconProps } from "../../types/Icon";
 export default function LogOutUserButton({ onClick }: { onClick: () => void }) {
   return (
     <button
-      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-bl-xl hover:scale-110"
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-bl-xl hover:scale-110 outline-none focus:outline-none focus:scale-110 transition-all duration-200 ease-in-out"
       onClick={onClick}
     >
       <LogOutUserLogo />

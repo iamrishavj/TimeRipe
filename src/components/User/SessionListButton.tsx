@@ -3,7 +3,7 @@ import { IconProps } from "../../types/Icon";
 export default function SessionListButton(props: { onClick: () => void }) {
   return (
     <button
-      class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-br-xl hover:scale-110"
+      class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-br-xl hover:scale-110 outline-none focus:outline-none focus:scale-110 transition-all duration-200 ease-in-out"
       onClick={props.onClick}
     >
       <SessionListLogo />
